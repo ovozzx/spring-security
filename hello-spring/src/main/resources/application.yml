@@ -1,0 +1,23 @@
+#logging:
+#  level:
+#    root: debug
+
+# mybatis와 spring 연동을 위한 설정.
+mybatis:
+  config-location: classpath:mybatis/config.xml
+  mapper-locations: classpath:com/ktdsuniversity/edu/**/mapper/*Mapper.xml
+
+spring:
+  # Template Engine (JSP)의 위치를 설정.
+  # 설정 경로: src/main/webapp 아래부터 작성.
+  mvc:
+    view:
+      prefix: /WEB-INF/views/ # src/main/webapp/WEB-INF/views/
+      suffix: .jsp
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: SPRING_BOOT
+    password: 1234
+  application:
+    name: hello-spring

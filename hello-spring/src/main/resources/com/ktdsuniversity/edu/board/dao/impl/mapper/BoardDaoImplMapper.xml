@@ -1,0 +1,74 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ktdsuniversity.edu.board.dao.impl.BoardDaoImpl">
+
+	<select id="selectBoardCount" resultType="_int">
+	   SELECT COUNT(ID)
+         FROM BOARD
+	</select>
+
+	<select id="selectBoardList"
+		resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
+	   SELECT ID
+		    , SUBJECT
+		    , CONTENT
+		    , EMAIL
+		    , VIEW_CNT
+		    , CRT_DT
+		    , MDFY_DT
+		    , DEL_YN
+		 FROM BOARD
+	</select>
+	
+	<insert id="insertNewBoard"
+	        parameterType="com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO">
+	    <selectKey keyProperty="id" order="BEFORE" resultType="string">
+	       SELECT 'AR-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_BOARD_PK.NEXTVAL, 6, '0')
+	         FROM DUAL
+	    </selectKey>
+        INSERT INTO BOARD 
+		 (ID
+		, SUBJECT
+		, CONTENT
+		, EMAIL
+		, VIEW_CNT
+		, CRT_DT
+		, MDFY_DT
+		, DEL_YN) 
+		VALUES
+		 (#{id}
+		, #{subject}
+		, #{content}
+		, #{email}
+		, 0
+		, SYSDATE
+		, SYSDATE
+		, 'N')
+	</insert>
+	
+	<update id="updateViewCntById" 
+	        parameterType="string">
+	    UPDATE BOARD
+	       SET VIEW_CNT = VIEW_CNT + 1
+	     WHERE ID = #{_parameter}
+	</update>
+	
+	<select id="selectBoardById"
+	        parameterType="string"
+	        resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
+	   SELECT ID
+            , SUBJECT
+            , CONTENT
+            , EMAIL
+            , VIEW_CNT
+            , CRT_DT
+            , MDFY_DT
+            , DEL_YN
+         FROM BOARD
+        WHERE ID = #{_parameter}
+	</select>
+	
+	
+</mapper>
