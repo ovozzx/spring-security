@@ -7,6 +7,7 @@
 	<select id="selectBoardCount" resultType="_int">
 	   SELECT COUNT(ID)
          FROM BOARD
+        WHERE DEL_YN = 'N'
 	</select>
 
 	<select id="selectBoardList"
@@ -20,6 +21,7 @@
 		    , MDFY_DT
 		    , DEL_YN
 		 FROM BOARD
+		WHERE DEL_YN = 'N'
 	</select>
 	
 	<insert id="insertNewBoard"
@@ -53,6 +55,7 @@
 	    UPDATE BOARD
 	       SET VIEW_CNT = VIEW_CNT + 1
 	     WHERE ID = #{_parameter}
+	       AND DEL_YN = 'N'
 	</update>
 	
 	<select id="selectBoardById"
@@ -68,7 +71,29 @@
             , DEL_YN
          FROM BOARD
         WHERE ID = #{_parameter}
+          AND DEL_YN = 'N'
 	</select>
+	
+	<update id="updateBoardModifyById"
+	        parameterType="com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO">
+        UPDATE BOARD
+		   SET SUBJECT = #{subject}
+		     , EMAIL = #{email}
+		     , CONTENT = #{content}
+		 WHERE ID = #{id}
+		   AND DEL_YN = 'N'
+	</update>
+	
+	<update id="deleteBoardById"
+	        parameterType="string">
+	    UPDATE BOARD
+		   SET DEL_YN = 'Y'
+		 WHERE ID = #{_parameter}
+		   AND DEL_YN = 'N'
+    </update>
+	
+	
+	
 	
 	
 </mapper>

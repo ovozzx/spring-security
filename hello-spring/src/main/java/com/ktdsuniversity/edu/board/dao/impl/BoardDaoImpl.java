@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.board.dao.BoardDao;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 
 @Repository
 public class BoardDaoImpl 
@@ -47,6 +48,16 @@ public class BoardDaoImpl
 	@Override
 	public BoardVO selectBoardById(String id) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBoardById", id);
+	}
+
+	@Override
+	public int updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBoardModifyById", requestModifyBoardVO);
+	}
+
+	@Override
+	public int deleteBoardById(String id) {
+		return super.getSqlSession().update(this.NAME_SPACE + "deleteBoardById", id);
 	}
 
 }

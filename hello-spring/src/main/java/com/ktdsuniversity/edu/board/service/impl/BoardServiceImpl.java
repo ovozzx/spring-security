@@ -9,6 +9,7 @@ import com.ktdsuniversity.edu.board.dao.BoardDao;
 import com.ktdsuniversity.edu.board.service.BoardService;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 
 @Service
@@ -43,23 +44,49 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardVO readBoardOneById(String id) {
+	public BoardVO readBoardOneById(String id, boolean doIncreaseViewCount) {
 		// 1. 게시글의 조회수를 1 증가시킨다.
 		/*
 		 * UPDATE BOARD
 		 *    SET VIEW_CNT = VIEW_CNT + 1
 		 *  WHERE ID = ?
 		 */
-		int updateCount = this.boardDao.updateViewCntById(id);
-		if (updateCount == 0) {
-			throw new IllegalArgumentException(id + "게시글은 존재하지 않습니다.");
+		if (doIncreaseViewCount) {
+			int updateCount = this.boardDao.updateViewCntById(id);
+			if (updateCount == 0) {
+				throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+			}
 		}
 		
 		// 2. 게시글의 내용을 조회한다.
 		BoardVO board = this.boardDao.selectBoardById(id);
+		if (board == null) {
+			throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+		}
 		
 		// 3. 게시글의 내용을 반환시킨다.
 		return board;
+	}
+
+	@Override
+	public boolean updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO) {
+		int updateCount = this.boardDao.updateBoardModifyById(requestModifyBoardVO);
+		
+		if (updateCount == 0) {
+			throw new IllegalArgumentException(requestModifyBoardVO.getId() + " 게시글은 존재하지 않습니다.");
+		}
+		
+		return updateCount > 0;
+	}
+
+	@Override
+	public boolean deleteBoardById(String id) {
+		int deleteCount = this.boardDao.deleteBoardById(id);
+		if (deleteCount == 0) {
+			throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+		}
+		
+		return deleteCount > 0;
 	}
 
 }

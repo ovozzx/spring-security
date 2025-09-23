@@ -31,9 +31,9 @@
                    
                    <div class="btn-group">
                        <div class="right-align">
-                           <a href="" class="modify-link">수정</a>
-                           <a href="" class="delete-link">삭제</a>
-                           <a href="" class="list-link">목록으로 가기</a>
+                           <a href="/modify/${board.id}" class="modify-link">수정</a>
+                           <a href="/delete/${board.id}" class="delete-link">삭제</a>
+                           <a href="/list" class="list-link">목록으로 가기</a>
                        </div>
                    </div>
                </div>
