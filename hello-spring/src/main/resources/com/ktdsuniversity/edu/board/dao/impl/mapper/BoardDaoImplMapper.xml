@@ -62,20 +62,55 @@
 	       AND DEL_YN = 'N'
 	</update>
 	
+	
+	<!-- Join된 쿼리의 결과를 단일 인스턴스로 받을 수 있도록 해준다. -->
+	<resultMap type="com.ktdsuniversity.edu.board.vo.BoardVO" 
+	           id="BoardVOMap"
+	           autoMapping="true">
+        <id column="ID" property="id" />
+        <association property="fileGroupVO"
+                     javaType="com.ktdsuniversity.edu.file.vo.FileGroupVO"
+                     autoMapping="true">
+            <id column="FILE_GROUP_ID" property="fileGroupId" />
+            <collection property="file"
+                        javaType="list" 
+                        ofType="com.ktdsuniversity.edu.file.vo.FileVO"
+                        autoMapping="true">
+                <id column="FILE_ID" property="fileId" />
+            </collection>
+        </association>
+	</resultMap>
+	
 	<select id="selectBoardById"
 	        parameterType="string"
-	        resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
-	   SELECT ID
-            , SUBJECT
-            , CONTENT
-            , EMAIL
-            , VIEW_CNT
-            , CRT_DT
-            , MDFY_DT
-            , DEL_YN
-         FROM BOARD
-        WHERE ID = #{_parameter}
-          AND DEL_YN = 'N'
+	        resultMap="BoardVOMap">
+	   SELECT B.ID
+		    , B.SUBJECT
+		    , B.CONTENT
+		    , B.EMAIL
+		    , B.VIEW_CNT
+		    , B.CRT_DT
+		    , B.MDFY_DT
+		    , B.DEL_YN
+		    , F.FILE_GROUP_ID 
+		    , F.FILE_COUNT 
+		    , F.FILE_ID 
+		    , F.FILE_DISPLAY_NAME 
+		    , F.FILE_SIZE 
+		    , F.FILE_TYPE 
+		 FROM BOARD B
+		 LEFT OUTER JOIN (SELECT FG.FILE_GROUP_ID 
+		                       , FG.FILE_COUNT 
+		                       , F.FILE_ID 
+		                       , F.FILE_DISPLAY_NAME 
+		                       , F.FILE_SIZE 
+		                       , F.FILE_TYPE 
+		                    FROM FILE_GROUP FG
+		                   INNER JOIN "FILE" F
+		                      ON FG.FILE_GROUP_ID = F.FILE_GROUP_ID) F
+		   ON B.FILE_GROUP_ID = F.FILE_GROUP_ID 
+		WHERE B.ID = #{_parameter}
+		  AND B.DEL_YN = 'N'
 	</select>
 	
 	<update id="updateBoardModifyById"

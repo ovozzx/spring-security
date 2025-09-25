@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.board.vo;
 
+import com.ktdsuniversity.edu.file.vo.FileGroupVO;
+
 public class BoardVO {
 
 	private int number;
@@ -11,6 +13,8 @@ public class BoardVO {
 	private String crtDt;
 	private String mdfyDt;
 	private String delYn;
+	
+	private FileGroupVO fileGroupVO;
 
 	public int getNumber() {
 		return this.number;
@@ -84,6 +88,14 @@ public class BoardVO {
 		this.delYn = delYn;
 	}
 
+	public FileGroupVO getFileGroupVO() {
+		return this.fileGroupVO;
+	}
+	
+	public void setFileGroupVO(FileGroupVO fileGroupVO) {
+		this.fileGroupVO = fileGroupVO;
+	}
+	
 	@Override
 	public String toString() {
 		return "BoardVO [id=" + this.id + ", subject=" + this.subject + ", content=" + this.content + ", email="

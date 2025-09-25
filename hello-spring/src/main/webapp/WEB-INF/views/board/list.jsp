@@ -50,7 +50,7 @@
 		                    <tr>
 		                        <td>${article.number}</td>
 		                        <td>
-		                          <a href="/view/${article.id}">${article.subject}</a>
+		                          <a href="/view/${article.id}"><c:out value="${article.subject}" /></a>
 		                        </td>
 		                        <td>${article.email}</td>
 		                        <td>${article.viewCnt}</td>

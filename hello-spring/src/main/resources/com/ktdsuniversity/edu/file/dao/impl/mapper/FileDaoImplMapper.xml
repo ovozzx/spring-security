@@ -32,4 +32,38 @@
 		, #{fileType})
     </insert>
     
+    <update id="updateDownloadCount"
+            parameterType="com.ktdsuniversity.edu.file.vo.RequestDownloadVO">
+        UPDATE "FILE"
+		   SET FILE_DOWNLOAD_COUNT = FILE_DOWNLOAD_COUNT + 1
+		 WHERE FILE_ID = #{fileId}
+		   AND FILE_GROUP_ID = #{fileGroupId}
+		   AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
+		                          FROM BOARD
+		                         WHERE ID = #{boardId})
+    </update>
+    
+    <select id="selectFileVO"
+            parameterType="com.ktdsuniversity.edu.file.vo.RequestDownloadVO"
+            resultType="com.ktdsuniversity.edu.file.vo.FileVO">
+        SELECT FILE_ID
+             , FILE_GROUP_ID
+             , FILE_SIZE
+             , FILE_DISPLAY_NAME
+             , FILE_NAME
+             , FILE_PATH
+             , FILE_DOWNLOAD_COUNT
+             , FILE_TYPE
+          FROM "FILE"
+         WHERE FILE_ID = #{fileId}
+           AND FILE_GROUP_ID = #{fileGroupId}
+           AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
+                                  FROM BOARD
+                                 WHERE ID = #{boardId})
+    </select>
+    
+    
+    
+    
+    
 </mapper>

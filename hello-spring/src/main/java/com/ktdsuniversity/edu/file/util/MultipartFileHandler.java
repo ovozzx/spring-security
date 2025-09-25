@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,12 @@ public class MultipartFileHandler {
 	
 	@Value("${app.multipart.obfuscation.hide-ext.enable}")
 	private boolean hideExtEnable;
+	
+	private Tika tika;
+	
+	public MultipartFileHandler() {
+		this.tika = new Tika();
+	}
 	
 	public List<FileVO> upload(List<MultipartFile> file) {
 		if (file == null) {
@@ -103,7 +110,12 @@ public class MultipartFileHandler {
 		uploadResult.setFileName(storePath.getName());
 		uploadResult.setFilePath(storePath.getAbsolutePath());
 		// TODO MimeType 추출 후 셋팅해야 함.
-		uploadResult.setFileType("파일의 MimeType을 작성");
+		// uploadResult.setFileType(mimeType);
+		
+		if (!this.availableStore(storePath, uploadResult, file.getOriginalFilename())) {
+			storePath.delete();
+			return null;
+		}
 		
 		return uploadResult;
 	}
@@ -124,8 +136,21 @@ public class MultipartFileHandler {
 		return newFilename;
 	}
 	
-	private boolean availableStore(File file) {
-		return false;
+	private boolean availableStore(File file, FileVO uploadResult, String displayFilename) {
+		try {
+			String mimeType = this.tika.detect(file);
+			uploadResult.setFileType(mimeType);
+			
+			if (mimeType.equals("text/plain")) {
+				mimeType = displayFilename.substring(displayFilename.lastIndexOf("."));
+			}
+			
+			System.out.println(file.getName() + " , " + mimeType);
+			
+			return this.whitelist.contains(mimeType);
+		} catch (IOException e) {
+			return false;
+		}
 	}
 	
 }

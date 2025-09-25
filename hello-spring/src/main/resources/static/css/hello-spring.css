@@ -155,7 +155,7 @@ div.board-write {
 
 div.board-view {
 	grid-template-columns: 80px 1fr;
-    grid-template-rows: repeat(5, 28px) minmax(320px, auto) 1fr;
+    grid-template-rows: repeat(2, 28px) auto repeat(3, 28px) minmax(320px, auto) 1fr;
 }
 
 div.grid {

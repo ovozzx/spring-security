@@ -33,12 +33,17 @@ spring:
 app:
   multipart:
     whitelist: 
+      .txt,
+      .yml,
+      .html,
+      .css,
+      text/html,
       image/png,
       image/gif,
       image/jpeg,
       image/tiff,
       application/pdf,
-      application/vnd.ms-excel,
+      application/x-tika-ooxml,
       application/zip,
       text/plain
 #   사용자가 업로드한 파일이 저장될 위치
