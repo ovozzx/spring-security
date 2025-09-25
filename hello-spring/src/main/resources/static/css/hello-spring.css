@@ -7,6 +7,63 @@ body {
 	font-family: "Noto Sans KR", sans-serif;
 }
 
+.vertical-flex {
+	display: flex;
+	flex-direction: column;
+}
+
+table.grid {
+	width: 100%;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	
+	& > thead {
+	   background-color: #ddd;
+	   border-bottom: 1px solid #ccc;
+	   
+	   & > tr > th {
+	       padding: 4px 0;
+	       border-right: 1px solid #ccc;
+	       
+	       &:last-child {
+	           border-right: 0;
+	       }
+	   }
+	}
+	
+	& > tbody {
+	   & > tr {
+	       border-bottom: 1px solid #ccc;
+	       
+	       &:last-child {
+	           border-bottom: 0;
+	       }
+	       
+	       &:hover {
+	           background-color: #eee;
+	       }
+	       
+	       & > td {
+	           border-right: 1px solid #ccc;
+	           padding: 4px 0 4px 8px;
+	           
+	           &.no-data {
+	               height: 350px;
+	               background-color: #eee;
+	               /* background-image: url('https://cdn.dribbble.com/userupload/2905353/file/original-2022966da1fc3718d3feddfdc471ae47.png?format=webp&resize=400x300&vertical=center');
+	               background-position: center;
+	               background-repeat: no-repeat; */
+	               text-align: center;
+	           }
+	           
+	           &:last-child {
+	               border-right: 0;
+	           }
+	       }
+	   }
+	}
+}
+
 a {
 	color: #555;
 	text-decoration: none;
@@ -53,9 +110,42 @@ div.wrapper {
 	}
 }
 
+div.btn-group {
+	& > .right-align {
+	   text-align: right;
+	}
+}
+
+button {
+	padding: 5px 10px;
+    color: #333;
+    border: 0;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: all 0.2s;
+}
+
+button.save-btn {
+    color: #4949ff;
+    
+    &:hover {
+        color: #FFF;
+        background-color: #4949ff;
+    }
+}
+       
+button.cancel-btn {
+    color: #ff4949;
+    
+    &:hover {
+        color: #FFF;
+        background-color: #ff4949;
+    }
+}
+
 div.board-write {
 	grid-template-columns: 80px 1fr;
-	grid-template-rows: 28px 28px 320px 1fr;
+	grid-template-rows: 28px 28px auto 320px 1fr;
 	
 	& > textarea {
         height: 300px;
@@ -97,33 +187,5 @@ div.grid {
 	       display: flex;
 	       justify-content: flex-end;
 	   }
-	   
-	   & button {
-	       padding: 5px 10px;
-	       color: #333;
-	       border: 0;
-	       border-radius: 5px;
-	       background-color: transparent;
-	       transition: all 0.2s;
-	   }
-	   
-	   & button.save-btn {
-	       color: #4949ff;
-	       
-	       &:hover {
-	           color: #FFF;
-	           background-color: #4949ff;
-	       }
-	   }
-	   
-	   & button.cancel-btn {
-	       color: #ff4949;
-	       
-	       &:hover {
-               color: #FFF;
-               background-color: #ff4949;
-           }
-       }
 	}
-	
 }

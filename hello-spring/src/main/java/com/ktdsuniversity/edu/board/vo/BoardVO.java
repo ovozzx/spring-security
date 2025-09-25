@@ -2,6 +2,7 @@ package com.ktdsuniversity.edu.board.vo;
 
 public class BoardVO {
 
+	private int number;
 	private String id;
 	private String subject;
 	private String content;
@@ -11,6 +12,14 @@ public class BoardVO {
 	private String mdfyDt;
 	private String delYn;
 
+	public int getNumber() {
+		return this.number;
+	}
+	
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	
 	public String getId() {
 		return this.id;
 	}

@@ -11,12 +11,26 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.file.dao.FileDao;
+import com.ktdsuniversity.edu.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.file.vo.FileVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 
 	@Autowired
+	private MultipartFileHandler multipartFileHandler;
+	
+	@Autowired
 	private BoardDao boardDao;
+	
+	@Autowired
+	private FileGroupDao fileGroupDao;
+	
+	@Autowired
+	private FileDao fileDao;
 	
 	@Override
 	public ResponseBoardListVO readBoardList() {
@@ -38,6 +52,25 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean createNewBoard(RequestCreateBoardVO requestCreateBoardVO) {
+		
+		List<FileVO> uploadResult = this.multipartFileHandler
+								  .upload(requestCreateBoardVO.getFile());
+		
+		if (uploadResult != null && uploadResult.size() > 0) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFileCount(uploadResult.size());
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			for (FileVO result : uploadResult) {
+				result.setFileGroupId(fileGroupVO.getFileGroupId());
+				int insertFileCount = this.fileDao.insertFile(result);
+			}
+
+			requestCreateBoardVO.setFileGroupId(fileGroupVO.getFileGroupId());
+		}
+		
 		// boardDao를 통해서 insert 를 수행시킨다.
 		// 그 결과를 반환시킨다.
 		return this.boardDao.insertNewBoard(requestCreateBoardVO) > 0;

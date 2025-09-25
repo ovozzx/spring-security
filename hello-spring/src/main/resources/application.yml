@@ -8,6 +8,10 @@ mybatis:
   mapper-locations: classpath:com/ktdsuniversity/edu/**/mapper/*Mapper.xml
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB # 1024(1kb) * 1024 (1mb) * 100 (100mb)
+      max-request-size: 10MB
   # Template Engine (JSP)의 위치를 설정.
   # 설정 경로: src/main/webapp 아래부터 작성.
   mvc:
@@ -21,3 +25,41 @@ spring:
     password: 1234
   application:
     name: hello-spring
+
+    
+    
+    
+# hello-spring application의 별도 설정(Customize)
+app:
+  multipart:
+    whitelist: 
+      image/png,
+      image/gif,
+      image/jpeg,
+      image/tiff,
+      application/pdf,
+      application/vnd.ms-excel,
+      application/zip,
+      text/plain
+#   사용자가 업로드한 파일이 저장될 위치
+#    base-dir: C:/uploadFiles
+#    base-dir: /Users/codemakers/Documents/uploadFiles
+    base-dir:
+      windows: C:/uploadFiles
+      macos: /Documents/uploadFiles
+    # 파일명 난독화 설정
+    obfuscation:
+      # 파일명을 난독화 할 것인지에 대한 여부
+      enable: true
+      # 난독화를 할 때, 확장자를 가릴것인지 아닌지에 대한 설정
+      hide-ext:
+        enable: true
+    
+    
+    
+    
+    
+    
+    
+    
+    

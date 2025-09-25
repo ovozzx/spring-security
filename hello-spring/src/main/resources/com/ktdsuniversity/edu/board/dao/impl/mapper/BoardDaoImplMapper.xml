@@ -12,16 +12,18 @@
 
 	<select id="selectBoardList"
 		resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
-	   SELECT ID
+	   SELECT ROW_NUMBER() OVER(ORDER BY ID) "NUMBER"
+	        , ID
 		    , SUBJECT
 		    , CONTENT
 		    , EMAIL
 		    , VIEW_CNT
-		    , CRT_DT
-		    , MDFY_DT
+		    , TO_CHAR(CRT_DT, 'YYYY-MM-DD') AS CRT_DT
+		    , TO_CHAR(MDFY_DT, 'YYYY-MM-DD') AS MDFY_DT
 		    , DEL_YN
 		 FROM BOARD
 		WHERE DEL_YN = 'N'
+		ORDER BY "NUMBER" DESC
 	</select>
 	
 	<insert id="insertNewBoard"
@@ -38,7 +40,8 @@
 		, VIEW_CNT
 		, CRT_DT
 		, MDFY_DT
-		, DEL_YN) 
+		, DEL_YN
+		, FILE_GROUP_ID) 
 		VALUES
 		 (#{id}
 		, #{subject}
@@ -47,7 +50,8 @@
 		, 0
 		, SYSDATE
 		, SYSDATE
-		, 'N')
+		, 'N'
+		, #{fileGroupId})
 	</insert>
 	
 	<update id="updateViewCntById" 

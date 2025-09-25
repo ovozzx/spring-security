@@ -1,12 +1,19 @@
 package com.ktdsuniversity.edu.board.vo;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class RequestCreateBoardVO {
 
 	private String id;
 	private String subject;
 	private String email;
 	private String content;
-
+	private String fileGroupId;
+	
+	private List<MultipartFile> file;
+	
 	public String getId() {
 		return id;
 	}
@@ -37,6 +44,22 @@ public class RequestCreateBoardVO {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	public List<MultipartFile> getFile() {
+		return file;
+	}
+	
+	public void setFile(List<MultipartFile> file) {
+		this.file = file;
+	}
+	
+	public String getFileGroupId() {
+		return this.fileGroupId;
+	}
+	
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
 	}
 
 	@Override
