@@ -7,6 +7,11 @@ body {
 	font-family: "Noto Sans KR", sans-serif;
 }
 
+.validate-error {
+	font-size: 0.85rem;
+	color: #f00;
+}
+
 .vertical-flex {
 	display: flex;
 	flex-direction: column;
@@ -145,9 +150,9 @@ button.cancel-btn {
 
 div.board-write {
 	grid-template-columns: 80px 1fr;
-	grid-template-rows: 28px 28px auto 320px 1fr;
+	grid-template-rows: repeat(3, auto) 320px 1fr;
 	
-	& > textarea {
+	& textarea {
         height: 300px;
     }
 }
@@ -162,7 +167,7 @@ div.grid {
 	display: grid;
 	row-gap: 10px;
 	
-	& > label.require{
+	& label.require{
 	   vertical-align: middle;
 	   
 	   &:before {
@@ -173,9 +178,17 @@ div.grid {
 		}
     }
 	
-	& > button, input, textarea {
+	& input,
+	& textarea {
+	   width: 100%;
+	}
+	
+	& button, 
+	& input, 
+	& textarea {
 	   padding: 10px;
 	   outline: 0;
+	   box-sizing: border-box;
 	}
 	
 	& > div.btn-group {

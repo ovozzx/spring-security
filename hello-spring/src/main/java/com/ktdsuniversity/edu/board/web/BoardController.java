@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.board.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class BoardController {
@@ -34,7 +37,16 @@ public class BoardController {
 	}
 	
 	@PostMapping("/write")
-	public String doWriteBoardAction(RequestCreateBoardVO requestCreateBoardVO) {
+	public String doWriteBoardAction(
+			@Valid RequestCreateBoardVO requestCreateBoardVO,
+			BindingResult bindingResult,
+			Model model) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("writeData", requestCreateBoardVO);
+			return "board/write";
+		}
+		
 		// 게시글 등록 트랜잭션 요청.
 		boolean createResult = this.boardService.createNewBoard(requestCreateBoardVO);
 		
@@ -114,7 +126,14 @@ public class BoardController {
 	 */
 	@PostMapping("/modify/{id}")
 	public String doBoardModifyAction(@PathVariable String id, 
-									  RequestModifyBoardVO requestModifyBoardVO) {
+									  @Valid RequestModifyBoardVO requestModifyBoardVO,
+									  BindingResult bindingResult,
+									  Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("board", requestModifyBoardVO);
+			return "board/modify";
+		}
+		
 		requestModifyBoardVO.setId(id);
 		
 		boolean updateResult = this.boardService.updateBoardModifyById(requestModifyBoardVO);
