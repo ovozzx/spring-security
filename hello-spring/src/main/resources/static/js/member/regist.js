@@ -9,7 +9,10 @@ $().ready(function() {
     $("#email").on("keyup", function() {
         var value = $(this).val();
         
-        var validateErrorCount = $(this).closest("div").find(".validate-error").length;
+        var validateErrorCount = $(this).closest("div")
+                                        .find(".validate-error")
+                                        .not(".not-ok")
+                                        .length;
         if (validateErrorCount > 0) {
             $(this).closest("div").find("span.not-ok").remove();
             $(this).closest("div").find("span.ok").remove();
@@ -26,6 +29,7 @@ $().ready(function() {
                 var okCount = $(that).closest("div").find("span.ok").length;
                 if (okCount === 0) {
                     $(that).after( $("<span class='ok'>사용 가능한 이메일입니다.</span>") );
+                    autoActive();
                 }
             }
             else {
