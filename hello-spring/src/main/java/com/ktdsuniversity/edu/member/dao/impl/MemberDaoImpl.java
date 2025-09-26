@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.member.dao.MemberDao;
+import com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO;
 
 @Repository
 public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao {
@@ -18,5 +19,21 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
 
+	@Override
+	public int insertNewMember(RequestRegistMemberVO requestRegistMemberVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewMember", requestRegistMemberVO);
+	}
+
+	@Override
+	public int selectMemberCountByEmail(String email) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectMemberCountByEmail", email);
+	}
+
 
 }
+
+
+
+
+
+

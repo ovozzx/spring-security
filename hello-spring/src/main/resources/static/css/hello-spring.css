@@ -148,6 +148,16 @@ button.cancel-btn {
     }
 }
 
+button:disabled {
+    background-color: #ddd;
+    color: #333;
+    
+    &:hover {
+       background-color: #eee;
+       color: #666;
+    }
+}
+
 div.board-write {
 	grid-template-columns: 80px 1fr;
 	grid-template-rows: repeat(3, auto) 320px 1fr;
@@ -161,6 +171,11 @@ div.board-write {
 div.board-view {
 	grid-template-columns: 80px 1fr;
     grid-template-rows: repeat(2, 28px) auto repeat(3, 28px) minmax(320px, auto) 1fr;
+}
+
+div.member-regist {
+    grid-template-columns: 120px 1fr;
+    grid-template-rows: repeat(5, auto);
 }
 
 div.grid {

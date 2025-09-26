@@ -22,13 +22,13 @@
 		            <label for="subject" class="require">제목</label>
 		            <div>
 		              <input id="subject" type="text" name="subject" value="${writeData.subject}" />
-		              <form:errors path="subject" cssClass="validate-error" />
+		              <form:errors path="subject" cssClass="validate-error validate-require" />
 		            </div>
 		            
 		            <label for="email" class="require email">이메일</label>
 		            <div>
 		              <input id="email" type="text" name="email" value="${writeData.email}" />
-		              <form:errors path="email" cssClass="validate-error" />
+		              <form:errors path="email" cssClass="validate-error validate-require validate-email" />
 		            </div>
 		            
 		            <label for="file">첨부파일</label>
@@ -40,7 +40,7 @@
 		            <label for="content" class="require">내용</label>
 		            <div>
 		              <textarea id="content" name="content">${writeData.content}</textarea>
-		              <form:errors path="content" cssClass="validate-error" />
+		              <form:errors path="content" cssClass="validate-error validate-require" />
 		            </div>
 		            
 		            <div class="btn-group">

@@ -4,4 +4,46 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.member.dao.impl.MemberDaoImpl">
     
+    <insert id="insertNewMember"
+            parameterType="com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO">
+        INSERT INTO "MEMBER" 
+         (EMAIL
+        , NAME
+        , PASSWORD
+        , SALT
+        , LOGIN_FAIL_CNT
+        , BLOCK_YN
+        , LATEST_LOGIN_BLOCK_DATE
+        , LATEST_LOGIN_FAIL_DATE
+        , LATEST_LOGIN_SUCCESS_DATE
+        , DEL_YN) 
+        VALUES
+         (#{email}
+        , #{name}
+        , #{password}
+        , 'salt'
+        , 0
+        , 'N'
+        , NULL
+        , NULL
+        , NULL
+        , 'N')
+    </insert>
+    
+    <select id="selectMemberCountByEmail"
+            parameterType="string"
+            resultType="_int">
+        SELECT COUNT(EMAIL)
+          FROM "MEMBER"
+         WHERE EMAIL = #{_parameter} 
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </mapper>
