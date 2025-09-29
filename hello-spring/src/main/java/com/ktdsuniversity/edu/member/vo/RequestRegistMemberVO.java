@@ -18,6 +18,8 @@ public class RequestRegistMemberVO {
 	@NotEmpty(message = "필수 입력입니다.")
 	private String passwordConfirm;
 
+	private String salt;
+	
 	public String getEmail() {
 		return email;
 	}
@@ -50,6 +52,14 @@ public class RequestRegistMemberVO {
 		this.passwordConfirm = passwordConfirm;
 	}
 
+	public String getSalt() {
+		return salt;
+	}
+	
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+	
 	@Override
 	public String toString() {
 		return "RequestRegistMemberVO [email=" + email + ", name=" + name + ", password=" + password

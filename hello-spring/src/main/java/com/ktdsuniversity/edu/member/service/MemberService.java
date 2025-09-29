@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.service;
 
+import com.ktdsuniversity.edu.member.vo.MemberVO;
+import com.ktdsuniversity.edu.member.vo.RequestMemberLoginVO;
 import com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO;
 
 public interface MemberService {
@@ -8,4 +10,10 @@ public interface MemberService {
 
 	int readMemberCountByEmail(String email);
 
+	MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO);
+
 }
+
+
+
+

@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.common.vo.AjaxResponse;
 import com.ktdsuniversity.edu.member.service.MemberService;
+import com.ktdsuniversity.edu.member.vo.MemberVO;
+import com.ktdsuniversity.edu.member.vo.RequestMemberLoginVO;
 import com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -60,6 +63,28 @@ public class MemberController {
     	return ajaxResponse;
     }
     
+    @GetMapping("/member/login")
+    public String viewLoginPage() {
+    	return "member/login";
+    }
+    
+    @PostMapping("/member/login")
+    public String doMemberLoginAction(
+    		@Valid RequestMemberLoginVO requestMemberLoginVO,
+    		BindingResult bindingResult,
+    		Model model,
+    		HttpSession httpSession) {
+    	
+    	if (bindingResult.hasErrors()) {
+    		model.addAttribute("inputData", requestMemberLoginVO);
+    		return "member/login";
+    	}
+    	
+    	MemberVO memberVO = this.memberService.readMember(requestMemberLoginVO);
+    	httpSession.setAttribute("__LOGIN_USER__", memberVO);
+    	
+    	return "redirect:/list";
+    }
 }
 
 
