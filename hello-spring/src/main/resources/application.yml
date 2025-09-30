@@ -14,10 +14,10 @@ spring:
       max-request-size: 10MB
   # Template Engine (JSP)의 위치를 설정.
   # 설정 경로: src/main/webapp 아래부터 작성.
-  mvc:
-    view:
-      prefix: /WEB-INF/views/ # src/main/webapp/WEB-INF/views/
-      suffix: .jsp
+  # mvc:
+    # view:
+      # prefix: /WEB-INF/views/ # src/main/webapp/WEB-INF/views/
+      # suffix: .jsp
   datasource:
     url: jdbc:oracle:thin:@localhost:1521:XE
     driver-class-name: oracle.jdbc.driver.OracleDriver

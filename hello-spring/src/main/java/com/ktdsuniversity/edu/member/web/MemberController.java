@@ -74,6 +74,7 @@ public class MemberController {
     		@Valid RequestMemberLoginVO requestMemberLoginVO,
     		BindingResult bindingResult,
     		Model model,
+    		@RequestParam String nextUrl,
     		HttpSession httpSession) {
     	
     	if (bindingResult.hasErrors()) {
@@ -84,7 +85,7 @@ public class MemberController {
     	MemberVO memberVO = this.memberService.readMember(requestMemberLoginVO);
     	httpSession.setAttribute("__LOGIN_USER__", memberVO);
     	
-    	return "redirect:/list";
+    	return "redirect:" + nextUrl;
     }
     
     @GetMapping("/member/logout")
