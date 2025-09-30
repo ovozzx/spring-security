@@ -56,6 +56,45 @@
            AND DEL_YN = 'N'
     </select>
     
+    <update id="updateLoginFailCountByEmail" 
+            parameterType="string">
+        UPDATE "MEMBER"
+           SET LOGIN_FAIL_CNT = LOGIN_FAIL_CNT + 1
+             , LATEST_LOGIN_FAIL_DATE = SYSDATE
+         WHERE EMAIL = #{_parameter}
+           AND DEL_YN = 'N'
+    </update>
+
+    <update id="updateBlockByEmail" 
+            parameterType="string">
+        UPDATE "MEMBER"
+           SET BLOCK_YN = 'Y'
+             , LATEST_LOGIN_BLOCK_DATE = SYSDATE
+         WHERE EMAIL = #{_parameter}
+           AND LOGIN_FAIL_CNT >= 5
+           AND DEL_YN = 'N'
+    </update>
+
+    <update id="updateLoginSuccessByEmail" 
+            parameterType="string">
+        UPDATE "MEMBER"
+           SET BLOCK_YN = 'N'
+             , LOGIN_FAIL_CNT = 0
+             , LATEST_LOGIN_SUCCESS_DATE = SYSDATE
+         WHERE EMAIL = #{_parameter}
+           AND DEL_YN = 'N'
+    </update>
+    
+    <select id="selectUnblockMemberByEmail"
+            parameterType="string"
+            resultType="_int">
+        SELECT COUNT(EMAIL)
+          FROM "MEMBER"
+         WHERE EMAIL = #{_parameter}
+           AND BLOCK_YN = 'Y'
+           AND LATEST_LOGIN_BLOCK_DATE <![CDATA[<=]]> SYSDATE - 1 / 24
+           AND DEL_YN = 'N'
+    </select>
     
     
     

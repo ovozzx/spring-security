@@ -11,4 +11,12 @@ public interface MemberDao {
 
 	MemberVO selectMemberByEmail(String email);
 
+	int updateLoginFailCountByEmail(String email);
+
+	int updateBlockByEmail(String email);
+
+	int updateLoginSuccessByEmail(String email);
+
+	int selectUnblockMemberByEmail(String email);
+
 }
