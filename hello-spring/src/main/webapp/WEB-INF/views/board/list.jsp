@@ -20,6 +20,7 @@
 <body>
 
     <div class="wrapper">
+        <jsp:include page="../member/memberloginlogout.jsp" />
 	    <h1 class="page-title">게시글 목록</h1>
 	    <div>검색된 게시글의 수: ${list.count}개</div>
 	    
@@ -36,7 +37,7 @@
 		        <tr>
 		            <th>번호</th>
 		            <th>제목</th>
-		            <th>이메일</th>
+		            <th>이름</th>
 		            <th>조회수</th>
 		            <th>등록일</th>
 		            <th>수정일</th>
@@ -52,7 +53,7 @@
 		                        <td>
 		                          <a href="/view/${article.id}"><c:out value="${article.subject}" /></a>
 		                        </td>
-		                        <td>${article.email}</td>
+		                        <td>${article.memberVO.name}</td>
 		                        <td>${article.viewCnt}</td>
 		                        <td>${article.crtDt}</td>
 		                        <td>${article.mdfyDt}</td>
@@ -70,7 +71,9 @@
 	    
 	    <div class="btn-group">
 	       <div class="right-align">
-	           <button type="button" class="save-btn write-article">새 글 작성</button>
+	           <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+	               <button type="button" class="save-btn write-article">새 글 작성</button>
+	           </c:if>
 	       </div>
 	    </div>
 	    

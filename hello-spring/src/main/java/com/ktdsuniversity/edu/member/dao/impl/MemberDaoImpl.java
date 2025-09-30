@@ -55,6 +55,11 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUnblockMemberByEmail", email);
 	}
 
+	@Override
+	public int updateDelYnByEmail(String email) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDelYnByEmail", email);
+	}
+
 
 }
 

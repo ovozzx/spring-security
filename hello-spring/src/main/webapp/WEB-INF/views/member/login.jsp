@@ -14,6 +14,7 @@
 	<body>
 	
 	   <div class="wrapper">
+	       <jsp:include page="./memberloginlogout.jsp" />
 	       <h1 class="page-title">로그인</h1>
 	       
            <form:form modelAttribute="requestMemberLoginVO"

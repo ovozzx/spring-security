@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.common.vo.AjaxResponse;
 import com.ktdsuniversity.edu.member.service.MemberService;
@@ -85,6 +86,37 @@ public class MemberController {
     	
     	return "redirect:/list";
     }
+    
+    @GetMapping("/member/logout")
+    public String doLogoutAction(HttpSession httpSession) {
+    	httpSession.invalidate();
+    	return "redirect:/list";
+    }
+    
+    @GetMapping("/member/delete-me")
+    public String doDeleteMeAction(
+    		HttpSession httpSession, 
+    		@SessionAttribute("__LOGIN_USER__") MemberVO memberVO) {
+    	// 1. 현재 로그인한 사용자의 이메일을 가져온다.
+    	// Case 1.
+//    	MemberVO memberVO = (MemberVO) httpSession.getAttribute("__LOGIN_USER__");
+//    	String email = memberVO.getEmail();
+    	String email = memberVO.getEmail();
+    	// 2. 현재 로그인한 사용자의 이메일로 MEMBER 테이블의 DEL_YN을 "Y"로 변경한다.
+    	boolean updateResult = this.memberService.updateDelYnByEmail(email);
+    	
+    	// 3. 현재 로그인한 사용자를 로그아웃 시킨다.
+    	httpSession.invalidate();
+    	
+    	// 4. /member/delete-success 로 이동한다.
+    	return "redirect:/member/delete-success";
+    }
+    
+    @GetMapping("/member/delete-success")
+    public String viewDeleteSuccessPage() {
+    	return "member/deletesuccess";
+    }
+    
 }
 
 

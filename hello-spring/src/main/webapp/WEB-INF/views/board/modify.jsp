@@ -12,6 +12,7 @@
     </head>
     <body>
         <div class="wrapper">
+            <jsp:include page="../member/memberloginlogout.jsp" />
 	        <h1 class="page-title">게시글 수정</h1>
 	        <form:form modelAttribute="requestModifyBoardVO" method="post" action="/modify/${board.id}">
 	            <div class="grid board-write">

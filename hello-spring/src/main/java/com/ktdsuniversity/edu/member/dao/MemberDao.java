@@ -19,4 +19,6 @@ public interface MemberDao {
 
 	int selectUnblockMemberByEmail(String email);
 
+	int updateDelYnByEmail(String email);
+
 }

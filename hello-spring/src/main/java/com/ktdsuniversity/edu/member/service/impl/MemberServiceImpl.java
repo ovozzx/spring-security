@@ -92,6 +92,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberVO;
 	}
 
+	@Override
+	public boolean updateDelYnByEmail(String email) {
+		return this.memberDao.updateDelYnByEmail(email) > 0;
+	}
+
 }
 
 

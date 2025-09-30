@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.board.vo;
 
 import com.ktdsuniversity.edu.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.member.vo.MemberVO;
 
 public class BoardVO {
 
@@ -13,17 +14,18 @@ public class BoardVO {
 	private String crtDt;
 	private String mdfyDt;
 	private String delYn;
-	
+
+	private MemberVO memberVO;
 	private FileGroupVO fileGroupVO;
 
 	public int getNumber() {
 		return this.number;
 	}
-	
+
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	
+
 	public String getId() {
 		return this.id;
 	}
@@ -88,19 +90,27 @@ public class BoardVO {
 		this.delYn = delYn;
 	}
 
+	public MemberVO getMemberVO() {
+		return memberVO;
+	}
+
+	public void setMemberVO(MemberVO memberVO) {
+		this.memberVO = memberVO;
+	}
+
 	public FileGroupVO getFileGroupVO() {
 		return this.fileGroupVO;
 	}
-	
+
 	public void setFileGroupVO(FileGroupVO fileGroupVO) {
 		this.fileGroupVO = fileGroupVO;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "BoardVO [id=" + this.id + ", subject=" + this.subject + ", content=" + this.content + ", email="
-				+ this.email + ", viewCnt=" + this.viewCnt + ", crtDt=" + this.crtDt + ", mdfyDt=" + this.mdfyDt
-				+ ", delYn=" + this.delYn + "]";
+		return "BoardVO [number=" + number + ", id=" + id + ", subject=" + subject + ", content=" + content + ", email="
+				+ email + ", viewCnt=" + viewCnt + ", crtDt=" + crtDt + ", mdfyDt=" + mdfyDt + ", delYn=" + delYn
+				+ ", memberVO=" + memberVO + ", fileGroupVO=" + fileGroupVO + "]";
 	}
 
 }

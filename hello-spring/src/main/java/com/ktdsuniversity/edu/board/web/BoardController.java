@@ -7,12 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.board.service.BoardService;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.member.vo.MemberVO;
 
 import jakarta.validation.Valid;
 
@@ -40,12 +42,15 @@ public class BoardController {
 	public String doWriteBoardAction(
 			@Valid RequestCreateBoardVO requestCreateBoardVO,
 			BindingResult bindingResult,
+			@SessionAttribute("__LOGIN_USER__") MemberVO loginUser,
 			Model model) {
 		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("writeData", requestCreateBoardVO);
 			return "board/write";
 		}
+		
+		requestCreateBoardVO.setEmail( loginUser.getEmail() );
 		
 		// 게시글 등록 트랜잭션 요청.
 		boolean createResult = this.boardService.createNewBoard(requestCreateBoardVO);

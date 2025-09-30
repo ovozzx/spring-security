@@ -17,6 +17,23 @@ body {
 	flex-direction: column;
 }
 
+.horizontal-flex {
+	display: flex;
+	flex-direction: row;
+}
+
+.flex-end {
+	justify-content: flex-end;
+}
+
+.flex-gap-10 {
+	gap: 10px;
+}
+
+.item-padding-0 > * {
+	padding: 0;
+}
+
 table.grid {
 	width: 100%;
 	border: 1px solid #ccc;
@@ -160,7 +177,7 @@ button:disabled {
 
 div.board-write {
 	grid-template-columns: 80px 1fr;
-	grid-template-rows: repeat(3, auto) 320px 1fr;
+	grid-template-rows: repeat(2, auto) 320px 1fr;
 	
 	& textarea {
         height: 300px;

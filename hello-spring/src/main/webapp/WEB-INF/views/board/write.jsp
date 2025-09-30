@@ -13,6 +13,7 @@
     </head>
     <body>
         <div class="wrapper">
+            <jsp:include page="../member/memberloginlogout.jsp" />
 	        <h1 class="page-title">게시글 작성</h1>
 	        <form:form modelAttribute="requestCreateBoardVO" 
 	                   method="post" 
@@ -23,12 +24,6 @@
 		            <div>
 		              <input id="subject" type="text" name="subject" value="${writeData.subject}" />
 		              <form:errors path="subject" cssClass="validate-error validate-require" />
-		            </div>
-		            
-		            <label for="email" class="require email">이메일</label>
-		            <div>
-		              <input id="email" type="text" name="email" value="${writeData.email}" />
-		              <form:errors path="email" cssClass="validate-error validate-require validate-email" />
 		            </div>
 		            
 		            <label for="file">첨부파일</label>

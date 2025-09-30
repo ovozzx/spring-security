@@ -10,6 +10,7 @@
     </head>
     <body>
         <div class="wrapper">
+            <jsp:include page="../member/memberloginlogout.jsp" />
             <h1 class="page-title">게시글 조회</h1>
                <div class="grid board-view">
                    <label for="subject">제목</label>
@@ -45,8 +46,10 @@
                    
                    <div class="btn-group">
                        <div class="right-align">
-                           <a href="/modify/${board.id}" class="modify-link">수정</a>
-                           <a href="/delete/${board.id}" class="delete-link">삭제</a>
+                           <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+	                           <a href="/modify/${board.id}" class="modify-link">수정</a>
+	                           <a href="/delete/${board.id}" class="delete-link">삭제</a>
+	                       </c:if>
                            <a href="/list" class="list-link">목록으로 가기</a>
                        </div>
                    </div>

@@ -5,24 +5,31 @@
 	namespace="com.ktdsuniversity.edu.board.dao.impl.BoardDaoImpl">
 
 	<select id="selectBoardCount" resultType="_int">
-	   SELECT COUNT(ID)
-         FROM BOARD
-        WHERE DEL_YN = 'N'
+	   SELECT COUNT(B.ID)
+         FROM BOARD B
+        INNER JOIN "MEMBER" M
+           ON B.EMAIL = M.EMAIL 
+        WHERE B.DEL_YN = 'N'
+          AND M.DEL_YN = 'N'
 	</select>
 
 	<select id="selectBoardList"
-		resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
-	   SELECT ROW_NUMBER() OVER(ORDER BY ID) "NUMBER"
-	        , ID
-		    , SUBJECT
-		    , CONTENT
-		    , EMAIL
-		    , VIEW_CNT
-		    , TO_CHAR(CRT_DT, 'YYYY-MM-DD') AS CRT_DT
-		    , TO_CHAR(MDFY_DT, 'YYYY-MM-DD') AS MDFY_DT
-		    , DEL_YN
-		 FROM BOARD
-		WHERE DEL_YN = 'N'
+		resultMap="BoardVOMap">
+	   SELECT ROW_NUMBER() OVER(ORDER BY B.ID) "NUMBER"
+		    , B.ID
+		    , B.SUBJECT
+		    , B.CONTENT
+		    , B.EMAIL
+		    , B.VIEW_CNT
+		    , TO_CHAR(B.CRT_DT, 'YYYY-MM-DD') AS CRT_DT
+		    , TO_CHAR(B.MDFY_DT, 'YYYY-MM-DD') AS MDFY_DT
+		    , B.DEL_YN
+		    , M.NAME 
+		 FROM BOARD B
+		INNER JOIN "MEMBER" M
+		   ON B.EMAIL = M.EMAIL 
+		WHERE B.DEL_YN = 'N'
+		  AND M.DEL_YN = 'N'
 		ORDER BY "NUMBER" DESC
 	</select>
 	
@@ -68,6 +75,11 @@
 	           id="BoardVOMap"
 	           autoMapping="true">
         <id column="ID" property="id" />
+        <association property="memberVO"
+                     javaType="com.ktdsuniversity.edu.member.vo.MemberVO"
+                     autoMapping="true">
+            <id column="EMAIL" property="email" />
+        </association>
         <association property="fileGroupVO"
                      javaType="com.ktdsuniversity.edu.file.vo.FileGroupVO"
                      autoMapping="true">

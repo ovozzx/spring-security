@@ -96,7 +96,13 @@
            AND DEL_YN = 'N'
     </select>
     
-    
+    <update id="updateDelYnByEmail"
+            parameterType="string">
+        UPDATE "MEMBER"
+           SET DEL_YN = 'Y'
+         WHERE EMAIL = #{_parameter}
+           AND DEL_YN = 'N'
+    </update>
     
     
 </mapper>
