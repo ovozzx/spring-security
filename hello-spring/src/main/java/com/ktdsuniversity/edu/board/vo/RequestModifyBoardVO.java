@@ -1,6 +1,5 @@
 package com.ktdsuniversity.edu.board.vo;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
 public class RequestModifyBoardVO {
