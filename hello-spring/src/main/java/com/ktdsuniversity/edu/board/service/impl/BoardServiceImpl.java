@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.ktdsuniversity.edu.board.dao.BoardDao;
 import com.ktdsuniversity.edu.board.service.BoardService;
@@ -11,11 +13,16 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.common.util.SessionUtil;
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.file.vo.FileVO;
+import com.ktdsuniversity.edu.member.vo.MemberVO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -103,6 +110,15 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO) {
+		
+		BoardVO board = this.boardDao.selectBoardById(requestModifyBoardVO.getId());
+		
+		// Spring --> Controller가 아닌 영역에서 Session을 가져오기 위한 방법 제공.
+		MemberVO loginUser = SessionUtil.getLoginObject();
+		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
+			throw new IllegalArgumentException("잘못된 접근입니다.");
+		}
+		
 		int updateCount = this.boardDao.updateBoardModifyById(requestModifyBoardVO);
 		
 		if (updateCount == 0) {
@@ -114,6 +130,15 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean deleteBoardById(String id) {
+		
+		BoardVO board = this.boardDao.selectBoardById(id);
+		MemberVO loginUser = SessionUtil.getLoginObject();
+		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
+			throw new IllegalArgumentException("잘못된 접근입니다!");
+		}
+		
+		
+		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		if (deleteCount == 0) {
 			throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");

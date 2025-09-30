@@ -129,7 +129,6 @@
 	        parameterType="com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO">
         UPDATE BOARD
 		   SET SUBJECT = #{subject}
-		     , EMAIL = #{email}
 		     , CONTENT = #{content}
 		 WHERE ID = #{id}
 		   AND DEL_YN = 'N'

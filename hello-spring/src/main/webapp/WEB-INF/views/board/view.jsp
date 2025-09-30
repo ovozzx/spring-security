@@ -46,7 +46,7 @@
                    
                    <div class="btn-group">
                        <div class="right-align">
-                           <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+                           <c:if test="${sessionScope.__LOGIN_USER__.email eq board.email}">
 	                           <a href="/modify/${board.id}" class="modify-link">수정</a>
 	                           <a href="/delete/${board.id}" class="delete-link">삭제</a>
 	                       </c:if>

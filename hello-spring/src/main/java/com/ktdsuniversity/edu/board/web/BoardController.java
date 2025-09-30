@@ -111,8 +111,20 @@ public class BoardController {
 	 * 게시글의 정보를 읽는다 ==> boardService.readBoardOneById(id); 사용.
 	 */
 	@GetMapping("/modify/{id}")
-	public String viewBoardModifyPage(@PathVariable String id, Model model) {
+	public String viewBoardModifyPage(
+			@PathVariable String id, Model model,
+			@SessionAttribute("__LOGIN_USER__") MemberVO loginUser
+		) {
+		
 		BoardVO board = this.boardService.readBoardOneById(id, false);
+		
+		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
+			throw new IllegalArgumentException("잘못된 접근입니다!");
+		}
+		
+		
+		
+		
 		model.addAttribute("board", board);
 		return "board/modify";
 	}
@@ -126,7 +138,8 @@ public class BoardController {
 	 * updateBoardModifyById(RequestModifyBoardVO)
 	 */
 	@PostMapping("/modify/{id}")
-	public String doBoardModifyAction(@PathVariable String id, @Valid RequestModifyBoardVO requestModifyBoardVO,
+	public String doBoardModifyAction(@PathVariable String id, 
+			@Valid RequestModifyBoardVO requestModifyBoardVO,
 			BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {

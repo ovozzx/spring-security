@@ -22,12 +22,6 @@
 		              <form:errors path="subject" cssClass="validate-error" />
 		            </div>
 		            
-		            <label for="email" class="require email">이메일</label>
-		            <div>
-		              <input id="email" type="email" name="email" value="${board.email}" />
-		              <form:errors path="email" cssClass="validate-error" />
-		            </div>
-		            
 		            <label for="content" class="require">내용</label>
 		            <div>
 		              <textarea id="content" name="content">${board.content}</textarea>
