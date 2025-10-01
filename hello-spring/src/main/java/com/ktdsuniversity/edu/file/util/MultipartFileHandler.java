@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.tika.Tika;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,8 @@ import com.ktdsuniversity.edu.file.vo.FileVO;
 @Component
 public class MultipartFileHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(MultipartFileHandler.class);
+	
 	// application.yml의 설정을 읽어오는 Annotation
 	@Value("${app.multipart.whitelist}") // SpEL
 	private List<String> whitelist;
@@ -157,7 +161,7 @@ public class MultipartFileHandler {
 				mimeType = displayFilename.substring(displayFilename.lastIndexOf("."));
 			}
 			
-			System.out.println(file.getName() + " , " + mimeType);
+			logger.info("FileName: {}, MimeType: {}", file.getName(), mimeType);
 			
 			return this.whitelist.contains(mimeType);
 		} catch (IOException e) {

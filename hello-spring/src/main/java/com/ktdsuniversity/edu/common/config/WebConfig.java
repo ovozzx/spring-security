@@ -67,4 +67,6 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.jsp("/WEB-INF/views/", ".jsp");
 	}
 	
+	
+	
 }

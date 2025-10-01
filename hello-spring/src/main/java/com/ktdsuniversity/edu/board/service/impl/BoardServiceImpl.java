@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SessionUtil;
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
@@ -89,14 +90,14 @@ public class BoardServiceImpl implements BoardService {
 		if (doIncreaseViewCount) {
 			int updateCount = this.boardDao.updateViewCntById(id);
 			if (updateCount == 0) {
-				throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+				throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
 			}
 		}
 		
 		// 2. 게시글의 내용을 조회한다.
 		BoardVO board = this.boardDao.selectBoardById(id);
 		if (board == null) {
-			throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+			throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
 		}
 		
 		// 3. 게시글의 내용을 반환시킨다.
@@ -111,13 +112,13 @@ public class BoardServiceImpl implements BoardService {
 		// Spring --> Controller가 아닌 영역에서 Session을 가져오기 위한 방법 제공.
 		MemberVO loginUser = SessionUtil.getLoginObject();
 		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new IllegalArgumentException("잘못된 접근입니다.");
+			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 		}
 		
 		int updateCount = this.boardDao.updateBoardModifyById(requestModifyBoardVO);
 		
 		if (updateCount == 0) {
-			throw new IllegalArgumentException(requestModifyBoardVO.getId() + " 게시글은 존재하지 않습니다.");
+			throw new HelloSpringException(requestModifyBoardVO.getId() + " 게시글은 존재하지 않습니다.", "error/404");
 		}
 		
 		return updateCount > 0;
@@ -129,14 +130,14 @@ public class BoardServiceImpl implements BoardService {
 		BoardVO board = this.boardDao.selectBoardById(id);
 		MemberVO loginUser = SessionUtil.getLoginObject();
 		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new IllegalArgumentException("잘못된 접근입니다!");
+			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 		}
 		
 		
 		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		if (deleteCount == 0) {
-			throw new IllegalArgumentException(id + " 게시글은 존재하지 않습니다.");
+			throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
 		}
 		
 		return deleteCount > 0;

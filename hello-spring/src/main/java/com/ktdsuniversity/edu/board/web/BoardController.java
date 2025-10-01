@@ -14,6 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.file.util.ResourceUtil;
 import com.ktdsuniversity.edu.member.vo.MemberVO;
@@ -41,6 +44,8 @@ import jakarta.validation.Valid;
 @Controller
 public class BoardController {
 
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	
 	@Autowired
 	private MultipartFileHandler multipartFileHandler;
 	
@@ -65,7 +70,10 @@ public class BoardController {
 	public String doWriteBoardAction(@Valid RequestCreateBoardVO requestCreateBoardVO, BindingResult bindingResult,
 			@SessionAttribute(value = "__LOGIN_USER__", required = false) MemberVO loginUser, Model model) {
 
+		logger.debug(requestCreateBoardVO.toString());
+		
 		if (bindingResult.hasErrors()) {
+			logger.debug("Validation Fail! : " + bindingResult);
 			model.addAttribute("writeData", requestCreateBoardVO);
 			return "board/write";
 		}
@@ -142,11 +150,8 @@ public class BoardController {
 		BoardVO board = this.boardService.readBoardOneById(id, false);
 		
 		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new IllegalArgumentException("잘못된 접근입니다!");
+			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 		}
-		
-		
-		
 		
 		model.addAttribute("board", board);
 		return "board/modify";
@@ -262,7 +267,7 @@ public class BoardController {
 			fileOutputStream = new FileOutputStream(excelFile);
 			workbook.write(fileOutputStream);
 		} catch (IOException e) {
-			throw new IllegalArgumentException("엑셀파일을 만들 수 없습니다.");
+			throw new HelloSpringException("엑셀파일을 만들수 없습니다.", "error/500");
 		} finally {
 			try {
 				workbook.close();

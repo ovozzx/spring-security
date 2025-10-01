@@ -20,6 +20,11 @@
 	       <form:form modelAttribute="requestRegistMemberVO"
 	                  method="post"
 	                  action="/member/regist">
+	           
+	           <c:if test="${not empty errorMessage}">
+	               <span class="validate-error">${errorMessage}</span>
+	           </c:if>
+	           
 		       <div class="grid member-regist">
 		          <label for="email" class="require email">이메일</label>
 		          <div>

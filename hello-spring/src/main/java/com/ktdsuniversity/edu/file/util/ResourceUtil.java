@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
+import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
+
 public class ResourceUtil {
 
 	public static ResponseEntity<Resource> getResource(
@@ -35,7 +37,7 @@ public class ResourceUtil {
     	try {
 			downloadResource = new InputStreamResource( new FileInputStream(file) );
 		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("파일이 존재하지 않습니다.");
+			throw new HelloSpringException("존재하지 않는 파일입니다.", "error/404");
 		}
     	
     	return ResponseEntity.ok()

@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.member.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SHAEncrypter;
 import com.ktdsuniversity.edu.member.dao.MemberDao;
 import com.ktdsuniversity.edu.member.service.MemberService;
@@ -20,7 +21,7 @@ public class MemberServiceImpl implements MemberService {
 	public boolean createNewMember(RequestRegistMemberVO requestRegistMemberVO) {
 		int emailCount = this.memberDao.selectMemberCountByEmail( requestRegistMemberVO.getEmail() );
 		if (emailCount == 1) {
-			throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+			throw new HelloSpringException("이미 존재하는 이메일입니다.", "member/regist", "registData", requestRegistMemberVO);
 		}
 		
 		// 비밀번호 암호화.
@@ -47,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
 		MemberVO memberVO = this.memberDao.selectMemberByEmail( requestMemberLoginVO.getEmail() );
 		// 2. 조회된 회원이 없을 경우(null)는 Exception Throw.
 		if (memberVO == null) {
-			throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다.");
+			throw new HelloSpringException("이메일 또는 비밀번호가 잘못되었습니다.", "member/login", "inputData", requestMemberLoginVO);
 		}
 		
 		// 블럭 케이스.
@@ -57,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
 		if ( memberVO.getBlockYn().equals("Y") ) {
 			int count = this.memberDao.selectUnblockMemberByEmail(requestMemberLoginVO.getEmail());
 			if ( count == 0 ) {
-				throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다.");
+				throw new HelloSpringException("이메일 또는 비밀번호가 잘못되었습니다.", "member/login", "inputData", requestMemberLoginVO);
 			}
 		}
 		
@@ -78,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
 			updateCount = this.memberDao.updateBlockByEmail(requestMemberLoginVO.getEmail());
 			
 			// 6. 일치하지 않을 경우는 Exception Throw.
-			throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다.");
+			throw new HelloSpringException("이메일 또는 비밀번호가 잘못되었습니다.", "member/login", "inputData", requestMemberLoginVO);
 		}
 		
 		

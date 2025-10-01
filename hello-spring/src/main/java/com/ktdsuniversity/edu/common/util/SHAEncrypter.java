@@ -4,8 +4,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SHAEncrypter {
 
+	private static final Logger logger = LoggerFactory.getLogger(SHAEncrypter.class);
+	
 	/**
 	 * SHA-256 암호화 함
 	 * 
@@ -47,7 +52,8 @@ public class SHAEncrypter {
 
 			result = sb.toString();
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			logger.error("암호화 실패!", e);
 		}
 
 		return result;
