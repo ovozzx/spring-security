@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.board.service;
 
+import java.util.List;
+
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
@@ -16,5 +18,7 @@ public interface BoardService {
 	public boolean updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO);
 
 	public boolean deleteBoardById(String id);
+
+	public List<BoardVO> readAllBoardListForExcel();
 	
 }

@@ -26,5 +26,7 @@ public interface BoardDao {
 	public int updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO);
 
 	public int deleteBoardById(String id);
+
+	public List<BoardVO> selectBoardListForExcel();
 	
 }

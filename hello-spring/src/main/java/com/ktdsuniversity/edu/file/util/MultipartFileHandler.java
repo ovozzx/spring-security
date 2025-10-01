@@ -42,6 +42,18 @@ public class MultipartFileHandler {
 		this.tika = new Tika();
 	}
 	
+	public File makeTemporaryFile() {
+		String os = System.getProperty("os.name");
+		String userHome = System.getProperty("user.home");
+		
+		String directory = this.windowsBaseDirectory;
+		if (os.toLowerCase().startsWith("mac")) {
+			directory = userHome + this.macosBaseDirectory;
+		}
+		
+		return new File(directory, UUID.randomUUID().toString());
+	}
+	
 	public List<FileVO> upload(List<MultipartFile> file) {
 		if (file == null) {
 			return null;

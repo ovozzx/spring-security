@@ -110,7 +110,11 @@
 		    , F.FILE_DISPLAY_NAME 
 		    , F.FILE_SIZE 
 		    , F.FILE_TYPE 
+		    , M.NAME
 		 FROM BOARD B
+		INNER JOIN "MEMBER" M
+		   ON B.EMAIL = M.EMAIL
+		  AND M.DEL_YN = 'N'
 		 LEFT OUTER JOIN (SELECT FG.FILE_GROUP_ID 
 		                       , FG.FILE_COUNT 
 		                       , F.FILE_ID 
@@ -142,8 +146,41 @@
 		   AND DEL_YN = 'N'
     </update>
 	
-	
-	
+	<select id="selectBoardListForExcel"
+            resultMap="BoardVOMap">
+       SELECT ROW_NUMBER() OVER(ORDER BY B.ID) "NUMBER"
+            , B.ID
+            , B.SUBJECT
+            , B.CONTENT
+            , B.EMAIL
+            , B.VIEW_CNT
+            , B.CRT_DT
+            , B.MDFY_DT
+            , B.DEL_YN
+            , F.FILE_GROUP_ID 
+            , F.FILE_COUNT 
+            , F.FILE_ID 
+            , F.FILE_DISPLAY_NAME 
+            , F.FILE_SIZE 
+            , F.FILE_TYPE 
+            , M.NAME
+         FROM BOARD B
+        INNER JOIN "MEMBER" M
+           ON B.EMAIL = M.EMAIL
+          AND M.DEL_YN = 'N'
+         LEFT OUTER JOIN (SELECT FG.FILE_GROUP_ID 
+                               , FG.FILE_COUNT 
+                               , F.FILE_ID 
+                               , F.FILE_DISPLAY_NAME 
+                               , F.FILE_SIZE 
+                               , F.FILE_TYPE 
+                            FROM FILE_GROUP FG
+                           INNER JOIN "FILE" F
+                              ON FG.FILE_GROUP_ID = F.FILE_GROUP_ID) F
+           ON B.FILE_GROUP_ID = F.FILE_GROUP_ID 
+        WHERE B.DEL_YN = 'N'
+        ORDER BY "NUMBER" DESC
+    </select>
 	
 	
 </mapper>

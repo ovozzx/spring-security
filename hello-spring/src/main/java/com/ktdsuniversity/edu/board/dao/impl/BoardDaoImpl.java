@@ -60,4 +60,9 @@ public class BoardDaoImpl
 		return super.getSqlSession().update(this.NAME_SPACE + "deleteBoardById", id);
 	}
 
+	@Override
+	public List<BoardVO> selectBoardListForExcel() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBoardListForExcel");
+	}
+
 }

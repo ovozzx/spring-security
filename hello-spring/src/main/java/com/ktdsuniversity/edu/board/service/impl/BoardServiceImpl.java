@@ -142,4 +142,9 @@ public class BoardServiceImpl implements BoardService {
 		return deleteCount > 0;
 	}
 
+	@Override
+	public List<BoardVO> readAllBoardListForExcel() {
+		return this.boardDao.selectBoardListForExcel();
+	}
+
 }

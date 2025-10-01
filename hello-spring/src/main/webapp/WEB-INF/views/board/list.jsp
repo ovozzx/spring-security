@@ -72,6 +72,8 @@
 	    <div class="btn-group">
 	       <div class="right-align">
 	           <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+	               <button type="button" class="save-btn download-article">목록 다운로드</button>
+	               <button type="button" class="save-btn download-article-2">목록 다운로드2</button>
 	               <button type="button" class="save-btn write-article">새 글 작성</button>
 	           </c:if>
 	       </div>
