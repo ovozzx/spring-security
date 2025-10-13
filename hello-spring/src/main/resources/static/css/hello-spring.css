@@ -7,6 +7,12 @@ body {
 	font-family: "Noto Sans KR", sans-serif;
 }
 
+pre.content {
+	margin: 0;
+	font-size: 1rem;
+	font-family: "Noto Sans KR", sans-serif;
+}
+
 .validate-error {
 	font-size: 0.85rem;
 	color: #f00;
@@ -187,7 +193,17 @@ div.board-write {
 
 div.board-view {
 	grid-template-columns: 80px 1fr;
-    grid-template-rows: repeat(2, 28px) auto repeat(3, 28px) minmax(320px, auto) 1fr;
+    grid-template-rows: repeat(2, 28px) auto repeat(3, 28px) auto 1fr auto;
+    
+    & > .reply-area {
+        grid-column: 1 / -1;
+        
+        & > .replies {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    }
 }
 
 div.member-regist {
@@ -234,3 +250,11 @@ div.grid {
 	   }
 	}
 }
+
+
+
+
+
+
+
+
