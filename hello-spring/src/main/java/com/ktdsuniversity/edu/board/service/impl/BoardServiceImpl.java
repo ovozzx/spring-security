@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.board.dao.BoardDao;
 import com.ktdsuniversity.edu.board.service.BoardService;
@@ -53,6 +54,7 @@ public class BoardServiceImpl implements BoardService {
 		
 	}
 
+	@Transactional
 	@Override
 	public boolean createNewBoard(RequestCreateBoardVO requestCreateBoardVO) {
 		
@@ -79,6 +81,7 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.insertNewBoard(requestCreateBoardVO) > 0;
 	}
 
+	@Transactional
 	@Override
 	public BoardVO readBoardOneById(String id, boolean doIncreaseViewCount) {
 		// 1. 게시글의 조회수를 1 증가시킨다.
@@ -89,6 +92,8 @@ public class BoardServiceImpl implements BoardService {
 		 */
 		if (doIncreaseViewCount) {
 			int updateCount = this.boardDao.updateViewCntById(id);
+//			Integer.parseInt("sfasdf"); // NumberFormatException
+			
 			if (updateCount == 0) {
 				throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
 			}
@@ -104,6 +109,7 @@ public class BoardServiceImpl implements BoardService {
 		return board;
 	}
 
+	@Transactional
 	@Override
 	public boolean updateBoardModifyById(RequestModifyBoardVO requestModifyBoardVO) {
 		
@@ -124,6 +130,7 @@ public class BoardServiceImpl implements BoardService {
 		return updateCount > 0;
 	}
 
+	@Transactional
 	@Override
 	public boolean deleteBoardById(String id) {
 		
@@ -132,8 +139,6 @@ public class BoardServiceImpl implements BoardService {
 		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
 			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 		}
-		
-		
 		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		if (deleteCount == 0) {

@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.member.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
@@ -17,6 +18,7 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberDao memberDao;
 
+    @Transactional
 	@Override
 	public boolean createNewMember(RequestRegistMemberVO requestRegistMemberVO) {
 		int emailCount = this.memberDao.selectMemberCountByEmail( requestRegistMemberVO.getEmail() );
@@ -42,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
 		return this.memberDao.selectMemberCountByEmail(email);
 	}
 
+	@Transactional(noRollbackFor = HelloSpringException.class)
 	@Override
 	public MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO) {
 		// 1. Email을 이용해 회원의 정보를 조회.
@@ -93,6 +96,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberVO;
 	}
 
+	@Transactional
 	@Override
 	public boolean updateDelYnByEmail(String email) {
 		return this.memberDao.updateDelYnByEmail(email) > 0;

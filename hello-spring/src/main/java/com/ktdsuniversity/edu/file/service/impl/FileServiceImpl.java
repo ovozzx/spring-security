@@ -1,7 +1,8 @@
 package com.ktdsuniversity.edu.file.service.impl;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.file.dao.FileDao;
@@ -15,6 +16,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileDao fileDao;
 
+    @Transactional
 	@Override
 	public FileVO readFileVO(RequestDownloadVO requestDownloadVO) {
 		// 파일 다운로드 횟수 증가.
