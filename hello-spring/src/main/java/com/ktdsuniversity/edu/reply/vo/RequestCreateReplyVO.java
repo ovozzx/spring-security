@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class RequestCreateReplyVO {
 
 	private String replyId;
+	private String parentReplyId;
 
 	private String boardId;
 	private MultipartFile replyAttachFile;
@@ -18,6 +19,14 @@ public class RequestCreateReplyVO {
 
 	public void setReplyId(String replyId) {
 		this.replyId = replyId;
+	}
+
+	public String getParentReplyId() {
+		return parentReplyId;
+	}
+
+	public void setParentReplyId(String parentReplyId) {
+		this.parentReplyId = parentReplyId;
 	}
 
 	public String getBoardId() {

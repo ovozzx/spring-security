@@ -84,10 +84,11 @@
                     </template>
                     <ul class="replies"></ul>
                     <div class="reply-input">
-                        <input type="file" name="attachFile" />
+                        <input type="hidden" class="parent-reply-id" />
+                        <input type="file" />
                         <label for="reply-content" class="require">댓글내용</label>
                         <div>
-                            <textarea id="reply-content" name="content"></textarea>
+                            <textarea id="reply-content"></textarea>
                         </div>
                         
                         <div class="btn-group">

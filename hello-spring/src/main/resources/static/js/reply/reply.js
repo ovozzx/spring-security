@@ -42,13 +42,15 @@ $().ready(function() {
             // 댓글에 댓글 달기
             replyDom.find(".reply-reply").on("click", function() {
                 // 댓글 입력 창을 댓글 아래에 생성한다.
-                alert("댓글달기!");
+                $(".reply-input").insertAfter($(this).closest("li"));
+                $(".reply-input").find(".parent-reply-id").val($(this).closest("li").data("reply-id"));
             });
             
             $(".replies").append(replyDom);
         }
     });
     
+    // TODO 파일 다운로드 경로 수정. --> boardId ==> replyId
     // 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
     // 댓글 삭제하기 --> 본인이 작성한 댓글만 삭제하게.
     // 댓글 수정하기 --> 본인이 작성한 댓글만 수정하게.
@@ -80,6 +82,15 @@ $().ready(function() {
                         // 첨부파일 데이터 + 댓글 내용 데이터
                         // 첨부파일을 전송시키기 위한 form-data
                         var formData = new FormData();
+                        
+                        // 대댓글일 경우, formData에 상위 댓글 아이디를 첨부시킨다.
+                        var parentReplyId = replyInput.find(".parent-reply-id").val();
+                        if (parentReplyId) {
+                            formData.append("parentReplyId", parentReplyId);
+                            replyInput.find(".parent-reply-id").val("");
+                            replyInput.insertAfter($(".replies"));
+                        }
+                        
                         if (files.length > 0) {
                             formData.append("replyAttachFile", files[0]);
                         }

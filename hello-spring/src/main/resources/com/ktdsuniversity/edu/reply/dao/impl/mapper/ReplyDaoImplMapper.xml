@@ -32,7 +32,7 @@
 		, SYSDATE
 		, SYSDATE
 		, 0
-		, NULL
+		, #{parentReplyId}
 		, 'N' 
 		, #{fileGroupId})
     </insert>
