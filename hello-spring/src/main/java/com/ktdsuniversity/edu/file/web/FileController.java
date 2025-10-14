@@ -22,9 +22,9 @@ public class FileController {
     @Autowired
     private FileService fileService;
     
-    @GetMapping("/file/{boardId}/{fileGroupId}/{fileId}")
+    @GetMapping("/file/{id}/{fileGroupId}/{fileId}")
     public ResponseEntity<Resource> doDownloadAction(
-    		@PathVariable String boardId,
+    		@PathVariable String id,
     		@PathVariable String fileGroupId,
     		@PathVariable String fileId,
     		@SessionAttribute(value="__LOGIN_USER__", required=false) MemberVO loginUser) {
@@ -34,7 +34,7 @@ public class FileController {
     	}
     	
     	RequestDownloadVO requestDownloadVO = new RequestDownloadVO();
-    	requestDownloadVO.setBoardId(boardId);
+    	requestDownloadVO.setId(id);
     	requestDownloadVO.setFileGroupId(fileGroupId);
     	requestDownloadVO.setFileId(fileId);
     	

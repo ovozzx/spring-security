@@ -39,8 +39,12 @@
 		 WHERE FILE_ID = #{fileId}
 		   AND FILE_GROUP_ID = #{fileGroupId}
 		   AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
-		                          FROM BOARD
-		                         WHERE ID = #{boardId})
+								  FROM BOARD
+								 WHERE ID = #{id}
+								 UNION ALL 
+								SELECT FILE_GROUP_ID
+								  FROM REPLY
+								 WHERE REPLY_ID = #{id})
     </update>
     
     <select id="selectFileVO"
@@ -59,7 +63,11 @@
            AND FILE_GROUP_ID = #{fileGroupId}
            AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
                                   FROM BOARD
-                                 WHERE ID = #{boardId})
+                                 WHERE ID = #{id}
+                                 UNION ALL 
+                                SELECT FILE_GROUP_ID
+                                  FROM REPLY
+                                 WHERE REPLY_ID = #{id})
     </select>
     
     <delete id="deleteFile"

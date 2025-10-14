@@ -150,8 +150,8 @@ $().ready(function() {
                             replyInput.find(".modify-attached-file").hide();
                             replyInput.find(".delete-file").prop("checked", false);
                             replyInput.insertAfter($(".replies"));
+                            formData.append("replyId", replyId);
                         }
-                        formData.append("replyId", replyId);
                         if (deleteFileId) {
                             formData.append("deleteFileId", deleteFileId);
                         }
@@ -185,6 +185,7 @@ $().ready(function() {
                             success: function(response) {
                                 // 4. 댓글 성공 여부를 반환.
                                 console.log(response);
+                                window.location.reload();
                             }
                         });
                     });

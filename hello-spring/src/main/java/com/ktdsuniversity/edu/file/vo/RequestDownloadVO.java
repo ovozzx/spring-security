@@ -2,16 +2,16 @@ package com.ktdsuniversity.edu.file.vo;
 
 public class RequestDownloadVO {
 
-	private String boardId;
+	private String id;
 	private String fileGroupId;
 	private String fileId;
 
-	public String getBoardId() {
-		return boardId;
+	public String getId() {
+		return id;
 	}
 
-	public void setBoardId(String boardId) {
-		this.boardId = boardId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getFileGroupId() {
@@ -32,7 +32,7 @@ public class RequestDownloadVO {
 
 	@Override
 	public String toString() {
-		return "RequestDownloadVO [boardId=" + boardId + ", fileGroupId=" + fileGroupId + ", fileId=" + fileId + "]";
+		return "RequestDownloadVO [id=" + id + ", fileGroupId=" + fileGroupId + ", fileId=" + fileId + "]";
 	}
 
 }

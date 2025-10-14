@@ -72,7 +72,7 @@
                             <pre class="content">#replyContent#</pre>
                             <div class="attached-file" 
                                  data-file-id="#fileId#">
-                                <a href="/file/${board.id}/#fileGroupId#/#fileId#">#replyAttachedFilename#</a>
+                                <a href="/file/#replyId#/#fileGroupId#/#fileId#">#replyAttachedFilename#</a>
                                 다운로드: #replyAttachedFileDownloadCount#
                             </div>
                             <div class="reply-control horizontal-flex flex-end flex-gap-10">
