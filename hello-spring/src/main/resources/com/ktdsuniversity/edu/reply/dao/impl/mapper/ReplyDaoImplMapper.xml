@@ -162,9 +162,7 @@
             parameterType="com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO">
         UPDATE REPLY
            SET CONTENT = #{replyContent}
-             , FILE_GROUP_ID = NVL(#{fileGroupId}, (SELECT FILE_GROUP_ID
-                                                      FROM REPLY
-                                                     WHERE REPLY_ID = #{replyId}))
+             , FILE_GROUP_ID = #{fileGroupId}
              , MDFY_DT = SYSDATE
          WHERE REPLY_ID = #{replyId}
     </update>

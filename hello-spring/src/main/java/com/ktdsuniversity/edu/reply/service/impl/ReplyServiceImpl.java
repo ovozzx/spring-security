@@ -55,6 +55,19 @@ public class ReplyServiceImpl implements ReplyService {
 			int insertNewReplyCount = this.replyDao.insertNewReply(requestCreateOrUpdateReplyVO);
 		}
 		else {
+			// 댓글 첨부파일 버그 수정 시작
+			ReplyVO replyVO = this.replyDao.selectReplyByReplyId(
+					requestCreateOrUpdateReplyVO.getReplyId());
+			
+			String deleteFileId = requestCreateOrUpdateReplyVO.getDeleteFileId();
+			if (uploadFile == null && deleteFileId != null) {
+				requestCreateOrUpdateReplyVO.setFileGroupId(null);
+			}
+			else if (uploadFile == null && deleteFileId == null) {
+				requestCreateOrUpdateReplyVO.setFileGroupId(replyVO.getFileGroupId());
+			}
+			// 댓글 첨부파일 버그 수정 끝
+			
 			// 댓글 수정.
 			int updateReplyCount = this.replyDao.updateReply(requestCreateOrUpdateReplyVO);
 			// 원래 첨부되었던 파일 정보 삭제.
