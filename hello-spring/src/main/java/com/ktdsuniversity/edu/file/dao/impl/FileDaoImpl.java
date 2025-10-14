@@ -35,5 +35,10 @@ public class FileDaoImpl extends SqlSessionDaoSupport implements FileDao {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFileVO", requestDownloadVO);
 	}
 
+	@Override
+	public int deleteFile(String deleteFileId) {
+		return super.getSqlSession().delete(this.NAME_SPACE + "deleteFile", deleteFileId);
+	}
+
 
 }

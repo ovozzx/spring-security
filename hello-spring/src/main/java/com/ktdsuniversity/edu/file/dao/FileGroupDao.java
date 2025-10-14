@@ -6,4 +6,6 @@ public interface FileGroupDao {
 
 	int insertFileGroup(FileGroupVO fileGroupVO);
 
+	int deleteGroup(String deleteFileId);
+
 }

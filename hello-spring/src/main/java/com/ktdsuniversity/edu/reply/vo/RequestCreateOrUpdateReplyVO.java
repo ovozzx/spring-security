@@ -2,10 +2,11 @@ package com.ktdsuniversity.edu.reply.vo;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class RequestCreateReplyVO {
+public class RequestCreateOrUpdateReplyVO {
 
 	private String replyId;
 	private String parentReplyId;
+	private String deleteFileId;
 
 	private String boardId;
 	private MultipartFile replyAttachFile;
@@ -27,6 +28,14 @@ public class RequestCreateReplyVO {
 
 	public void setParentReplyId(String parentReplyId) {
 		this.parentReplyId = parentReplyId;
+	}
+
+	public String getDeleteFileId() {
+		return deleteFileId;
+	}
+
+	public void setDeleteFileId(String deleteFileId) {
+		this.deleteFileId = deleteFileId;
 	}
 
 	public String getBoardId() {

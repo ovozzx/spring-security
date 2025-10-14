@@ -11,4 +11,6 @@ public interface FileDao {
 
 	FileVO selectFileVO(RequestDownloadVO requestDownloadVO);
 
+	int deleteFile(String deleteFileId);
+
 }

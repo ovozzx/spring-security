@@ -5,7 +5,7 @@
 <mapper namespace="com.ktdsuniversity.edu.reply.dao.impl.ReplyDaoImpl">
     
     <insert id="insertNewReply"
-            parameterType="com.ktdsuniversity.edu.reply.vo.RequestCreateReplyVO">
+            parameterType="com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO">
         <selectKey keyProperty="replyId"
                    resultType="string"
                    order="BEFORE">
@@ -139,6 +139,7 @@
 		     ON R.EMAIL = M.EMAIL
 		  WHERE R.BOARD_ID = #{_parameter}
 		    AND M.DEL_YN = 'N'
+		    AND R.DEL_YN = 'N'
 		  START WITH R.PARENT_REPLY_ID IS NULL
 		CONNECT BY PRIOR R.REPLY_ID = R.PARENT_REPLY_ID 
     </select> 
@@ -148,6 +149,24 @@
         UPDATE REPLY
 		   SET RECOMMEND_CNT = RECOMMEND_CNT + 1
 		 WHERE REPLY_ID = #{_parameter}
+    </update>
+    
+    <update id="deleteReplyByReplyId"
+            parameterType="string">
+        UPDATE REPLY
+           SET DEL_YN = 'Y'
+         WHERE REPLY_ID = #{_parameter}
+    </update>
+    
+    <update id="updateReply"
+            parameterType="com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO">
+        UPDATE REPLY
+           SET CONTENT = #{replyContent}
+             , FILE_GROUP_ID = NVL(#{fileGroupId}, (SELECT FILE_GROUP_ID
+                                                      FROM REPLY
+                                                     WHERE REPLY_ID = #{replyId}))
+             , MDFY_DT = SYSDATE
+         WHERE REPLY_ID = #{replyId}
     </update>
     
 </mapper>

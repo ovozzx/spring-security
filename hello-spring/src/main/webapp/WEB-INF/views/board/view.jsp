@@ -70,7 +70,8 @@
                                 <div class="recommend-count">추천: #replyRecommendCount#</div>
                             </div>
                             <pre class="content">#replyContent#</pre>
-                            <div class="attached-file">
+                            <div class="attached-file" 
+                                 data-file-id="#fileId#">
                                 <a href="/file/${board.id}/#fileGroupId#/#fileId#">#replyAttachedFilename#</a>
                                 다운로드: #replyAttachedFileDownloadCount#
                             </div>
@@ -85,7 +86,14 @@
                     <ul class="replies"></ul>
                     <div class="reply-input">
                         <input type="hidden" class="parent-reply-id" />
+                        <input type="hidden" class="reply-id" />
                         <input type="file" />
+                        
+                        <div class="modify-attached-file">
+                            <input type="checkbox" class="delete-file" />
+                            <span class="attached-file-name"></span>
+                        </div>
+                        
                         <label for="reply-content" class="require">댓글내용</label>
                         <div>
                             <textarea id="reply-content"></textarea>

@@ -20,4 +20,13 @@
 		, #{fileCount})
     </insert>
     
+    <delete id="deleteGroup"
+            parameterType="string">
+        DELETE
+          FROM FILE_GROUP
+         WHERE FILE_GROUP_ID = (SELECT FILE_GROUP_ID
+                                  FROM "FILE"
+                                 WHERE FILE_ID = #{_parameter})
+    </delete>
+    
 </mapper>

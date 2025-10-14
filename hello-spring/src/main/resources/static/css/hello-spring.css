@@ -262,7 +262,17 @@ div.grid {
 	}
 }
 
-
+.reply-input {
+	background-color: #fff;
+	
+	& .modify-attached-file {
+	    display: none;
+	}
+	
+	& input[type=checkbox] {
+	    width: auto;
+	}
+}
 
 
 

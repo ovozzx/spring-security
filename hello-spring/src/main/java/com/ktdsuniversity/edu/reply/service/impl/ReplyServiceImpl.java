@@ -16,7 +16,7 @@ import com.ktdsuniversity.edu.file.vo.FileVO;
 import com.ktdsuniversity.edu.reply.dao.ReplyDao;
 import com.ktdsuniversity.edu.reply.service.ReplyService;
 import com.ktdsuniversity.edu.reply.vo.ReplyVO;
-import com.ktdsuniversity.edu.reply.vo.RequestCreateReplyVO;
+import com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO;
 
 @Service
 public class ReplyServiceImpl implements ReplyService {
@@ -35,9 +35,9 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Transactional
 	@Override
-	public ReplyVO createReply(RequestCreateReplyVO requestCreateReplyVO) {
+	public ReplyVO createOrUpdateReply(RequestCreateOrUpdateReplyVO requestCreateOrUpdateReplyVO) {
 		
-		FileVO uploadFile = this.multipartFileHandler.upload(requestCreateReplyVO.getReplyAttachFile());
+		FileVO uploadFile = this.multipartFileHandler.upload(requestCreateOrUpdateReplyVO.getReplyAttachFile());
 		if (uploadFile != null) {
 			// 1. File Group Insert
 			FileGroupVO fileGroupVO = new FileGroupVO();
@@ -48,12 +48,21 @@ public class ReplyServiceImpl implements ReplyService {
 			uploadFile.setFileGroupId(fileGroupVO.getFileGroupId());
 			int insertFileCount = this.fileDao.insertFile(uploadFile);
 			
-			requestCreateReplyVO.setFileGroupId(fileGroupVO.getFileGroupId());
+			requestCreateOrUpdateReplyVO.setFileGroupId(fileGroupVO.getFileGroupId());
 		}
 		
-		int insertNewReplyCount = this.replyDao.insertNewReply(requestCreateReplyVO);
+		if (requestCreateOrUpdateReplyVO.getReplyId() == null) {
+			int insertNewReplyCount = this.replyDao.insertNewReply(requestCreateOrUpdateReplyVO);
+		}
+		else {
+			// 댓글 수정.
+			int updateReplyCount = this.replyDao.updateReply(requestCreateOrUpdateReplyVO);
+			// 원래 첨부되었던 파일 정보 삭제.
+			int deleteFileGroupCount = this.fileGroupDao.deleteGroup(requestCreateOrUpdateReplyVO.getDeleteFileId());
+			int deleteFileCount = this.fileDao.deleteFile(requestCreateOrUpdateReplyVO.getDeleteFileId());
+		}
 		ReplyVO insertedReply = this.replyDao.selectReplyByReplyId(
-										requestCreateReplyVO.getReplyId());
+										requestCreateOrUpdateReplyVO.getReplyId());
 		return insertedReply;
 	}
 
@@ -85,4 +94,20 @@ public class ReplyServiceImpl implements ReplyService {
 		return this.replyDao.selectReplyByReplyId(replyId).getRecommendCnt();
 	}
 
+	@Override
+	public boolean deleteReplyByReplyId(String replyId) {
+		String loginUser = SessionUtil.getLoginObject().getEmail();
+		
+		// replyId로 댓글 정보 조회.
+		String replyUser = this.replyDao.selectReplyByReplyId(replyId).getEmail();
+		
+		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
+		// 다르다면 예외를 던짐.
+		if (!loginUser.equals(replyUser)) {
+			throw new HelloSpringException("잘못된 접근입니다.", "error/404");
+		}
+		
+		// 같다면 삭제
+		return this.replyDao.deleteReplyByReplyId(replyId) > 0;
+	}
 }

@@ -62,7 +62,12 @@
                                  WHERE ID = #{boardId})
     </select>
     
-    
+    <delete id="deleteFile"
+            parameterType="string">
+        DELETE 
+          FROM "FILE"
+         WHERE FILE_ID = #{_parameter}
+    </delete>
     
     
     

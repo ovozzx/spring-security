@@ -14,7 +14,7 @@ import com.ktdsuniversity.edu.common.vo.AjaxResponse;
 import com.ktdsuniversity.edu.member.vo.MemberVO;
 import com.ktdsuniversity.edu.reply.service.ReplyService;
 import com.ktdsuniversity.edu.reply.vo.ReplyVO;
-import com.ktdsuniversity.edu.reply.vo.RequestCreateReplyVO;
+import com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO;
 
 @Controller
 public class ReplyController {
@@ -35,15 +35,15 @@ public class ReplyController {
     
     @PostMapping("/reply/{boardId}")
     @ResponseBody
-    public AjaxResponse doCreateReplyAction(
-    		RequestCreateReplyVO requestCreateReplyVO,
+    public AjaxResponse doCreateOrUpdateReplyAction(
+    		RequestCreateOrUpdateReplyVO requestCreateOrUpdateReplyVO,
     		@PathVariable String boardId,
     		@SessionAttribute("__LOGIN_USER__") MemberVO memberVO) {
     	
-    	requestCreateReplyVO.setBoardId(boardId);
-    	requestCreateReplyVO.setEmail(memberVO.getEmail());
+    	requestCreateOrUpdateReplyVO.setBoardId(boardId);
+    	requestCreateOrUpdateReplyVO.setEmail(memberVO.getEmail());
     	
-    	ReplyVO newReply = this.replyService.createReply(requestCreateReplyVO);
+    	ReplyVO newReply = this.replyService.createOrUpdateReply(requestCreateOrUpdateReplyVO);
     	
     	AjaxResponse replyResponse = new AjaxResponse();
     	replyResponse.setBody(newReply);
@@ -63,7 +63,17 @@ public class ReplyController {
     	return recommendResponse;
     }
     
-    
+    @GetMapping("/reply/{replyId}/delete")
+    @ResponseBody
+    public AjaxResponse doRemoveReplyAction(@PathVariable String replyId) {
+    	
+    	boolean deleteResult = 
+    			this.replyService.deleteReplyByReplyId(replyId);
+    	
+    	AjaxResponse recommendResponse = new AjaxResponse();
+    	recommendResponse.setBody(deleteResult);
+    	return recommendResponse;
+    }
 }
 
 

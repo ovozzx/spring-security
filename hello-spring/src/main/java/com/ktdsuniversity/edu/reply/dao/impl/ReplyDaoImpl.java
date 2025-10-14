@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.reply.dao.ReplyDao;
 import com.ktdsuniversity.edu.reply.vo.ReplyVO;
-import com.ktdsuniversity.edu.reply.vo.RequestCreateReplyVO;
+import com.ktdsuniversity.edu.reply.vo.RequestCreateOrUpdateReplyVO;
 
 @Repository
 public class ReplyDaoImpl extends SqlSessionDaoSupport implements ReplyDao {
@@ -23,7 +23,7 @@ public class ReplyDaoImpl extends SqlSessionDaoSupport implements ReplyDao {
     }
 
 	@Override
-	public int insertNewReply(RequestCreateReplyVO requestCreateReplyVO) {
+	public int insertNewReply(RequestCreateOrUpdateReplyVO requestCreateReplyVO) {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewReply", requestCreateReplyVO);
 	}
 
@@ -42,5 +42,14 @@ public class ReplyDaoImpl extends SqlSessionDaoSupport implements ReplyDao {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateReplyRecommendByReplyId", replyId);
 	}
 
+	@Override
+	public int deleteReplyByReplyId(String replyId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "deleteReplyByReplyId", replyId);
+	}
+	
+	@Override
+	public int updateReply(RequestCreateOrUpdateReplyVO requestCreateOrUpdateReplyVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateReply", requestCreateOrUpdateReplyVO);
+	}
 
 }

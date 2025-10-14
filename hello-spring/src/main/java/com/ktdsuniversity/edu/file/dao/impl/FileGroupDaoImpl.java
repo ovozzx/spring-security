@@ -24,5 +24,10 @@ public class FileGroupDaoImpl extends SqlSessionDaoSupport implements FileGroupD
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertFileGroup", fileGroupVO);
 	}
 
+	@Override
+	public int deleteGroup(String deleteFileId) {
+		return super.getSqlSession().delete(this.NAME_SPACE + "deleteGroup", deleteFileId);
+	}
+
 
 }

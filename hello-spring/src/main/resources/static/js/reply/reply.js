@@ -1,3 +1,7 @@
+String.prototype.replaceAll = function(findText, replaceText) {
+    return this.split(findText).join(replaceText);
+};
+
 $().ready(function() {
 
     // 게시글 아이디 가져오기
@@ -10,17 +14,17 @@ $().ready(function() {
         for (var i = 0; i < response.body.length; i++) {
             var reply = response.body[i];
             var replyHtml = 
-                replyTemplate.replace("#replyId#", reply.replyId)
-                             .replace("#replyAuthor#", reply.memberVO.name)
-                             .replace("#replyCreateDateTime#", reply.crtDt)
-                             .replace("#replyModifyDateTime#", reply.mdfyDt)
-                             .replace("#replyRecommendCount#", reply.recommendCnt)
-                             .replace("#replyContent#", reply.content);
+                replyTemplate.replaceAll("#replyId#", reply.replyId)
+                             .replaceAll("#replyAuthor#", reply.memberVO.name)
+                             .replaceAll("#replyCreateDateTime#", reply.crtDt)
+                             .replaceAll("#replyModifyDateTime#", reply.mdfyDt)
+                             .replaceAll("#replyRecommendCount#", reply.recommendCnt)
+                             .replaceAll("#replyContent#", reply.content);
             if (reply.fileGroupId) {
-                replyHtml = replyHtml.replace("#fileGroupId#", reply.fileGroupId)
-                                     .replace("#fileId#", reply.fileGroupVO.file[0].fileId)
-                                     .replace("#replyAttachedFilename#", reply.fileGroupVO.file[0].fileDisplayName)
-                                     .replace("#replyAttachedFileDownloadCount#", reply.fileGroupVO.file[0].fileDownloadCount);
+                replyHtml = replyHtml.replaceAll("#fileGroupId#", reply.fileGroupId)
+                                     .replaceAll("#fileId#", reply.fileGroupVO.file[0].fileId)
+                                     .replaceAll("#replyAttachedFilename#", reply.fileGroupVO.file[0].fileDisplayName)
+                                     .replaceAll("#replyAttachedFileDownloadCount#", reply.fileGroupVO.file[0].fileDownloadCount);
             }
             
             var replyDom = $(replyHtml);
@@ -40,13 +44,43 @@ $().ready(function() {
             
             // 댓글 삭제하기 --> 본인이 작성한 댓글만 삭제하게.
             replyDom.find(".reply-delete").on("click", function() {
-                // 삭제를 클릭하면 해당되는 댓글의 DEL_YN이 'N'으로 변경된다.
-                // 변경이 완료되면, 해당 댓글을 브라우저에서 제거한다.
+                var replyItem = $(this).closest("li");
+                var replyId = replyItem.data("reply-id");
+                $.get("/reply/" + replyId + "/delete", function(response) {
+                    replyItem.remove();
+                });
             });
             
             // 댓글 수정하기 --> 본인이 작성한 댓글만 수정하게.
             replyDom.find(".reply-modify").on("click", function() {
+                var replyListItem = $(this).closest("li");
                 
+                $(".reply-input").insertAfter(replyListItem);
+                $("#reply-content").val(replyListItem.find(".content").text());
+                $(".reply-input").find(".reply-id").val( replyListItem.data("reply-id") );
+                
+                var attachedFileBox = replyListItem.find(".attached-file");
+                var fileId = attachedFileBox.data("file-id");
+                
+                if (fileId) {
+                    $(".reply-input").find(".modify-attached-file")
+                                     .children(".delete-file")
+                                     .val(fileId);
+                                     
+                    $(".reply-input").find(".modify-attached-file").show();
+                    $(".reply-input").find(".modify-attached-file")
+                                     .children(".attached-file-name")
+                                     .text( attachedFileBox.children("a")
+                                                           .text() );
+                }
+                else {
+                    $(".reply-input").find(".modify-attached-file")
+                                     .children(".delete-file")
+                                     .val("");
+                    $(".reply-input").find(".modify-attached-file").hide();
+                }
+                
+                $("#reply-content").focus();
             });
             
             var whoami = $("#login-user-email").text();
@@ -105,6 +139,23 @@ $().ready(function() {
                         // 첨부파일 데이터 + 댓글 내용 데이터
                         // 첨부파일을 전송시키기 위한 form-data
                         var formData = new FormData();
+                        
+                        // 댓글 수정일 경우, formData에 수정하려는 댓글의 아이디와
+                        // 첨부파일 삭제 여부도 함께 전달한다.
+                        var replyId = replyInput.find(".reply-id").val();
+                        var deleteFileId = replyInput.find(".delete-file:checked").val();
+                        if (replyId) {
+                            replyInput.find(".reply-id").val("");
+                            replyInput.find(".delete-file").val("");
+                            replyInput.find(".modify-attached-file").hide();
+                            replyInput.find(".delete-file").prop("checked", false);
+                            replyInput.insertAfter($(".replies"));
+                        }
+                        formData.append("replyId", replyId);
+                        if (deleteFileId) {
+                            formData.append("deleteFileId", deleteFileId);
+                        }
+                        
                         
                         // 대댓글일 경우, formData에 상위 댓글 아이디를 첨부시킨다.
                         var parentReplyId = replyInput.find(".parent-reply-id").val();
