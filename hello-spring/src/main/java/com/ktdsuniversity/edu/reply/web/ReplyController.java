@@ -1,7 +1,10 @@
 package com.ktdsuniversity.edu.reply.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +22,17 @@ public class ReplyController {
     @Autowired
     private ReplyService replyService;
 
+    @GetMapping("/reply/{boardId}")
+    @ResponseBody 
+    public AjaxResponse doReadReplyListAction(
+    		@PathVariable String boardId) {
+    	List<ReplyVO> replyList = this.replyService.readReplyListByBoardId(boardId);
+    	
+    	AjaxResponse replyListResponse = new AjaxResponse();
+    	replyListResponse.setBody(replyList);
+    	return replyListResponse;
+    }
+    
     @PostMapping("/reply/{boardId}")
     @ResponseBody
     public AjaxResponse doCreateReplyAction(

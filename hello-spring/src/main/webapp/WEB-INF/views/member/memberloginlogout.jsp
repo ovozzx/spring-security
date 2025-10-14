@@ -10,7 +10,7 @@
 		</c:when>
 		<c:otherwise>
 			<div>${sessionScope.__LOGIN_USER__.name}
-				(${sessionScope.__LOGIN_USER__.email})</div>
+				(<span id="login-user-email">${sessionScope.__LOGIN_USER__.email}</span>)</div>
 			<a href="/member/logout">로그아웃</a>
 			<a href="/member/delete-me">탈퇴</a>
 		</c:otherwise>

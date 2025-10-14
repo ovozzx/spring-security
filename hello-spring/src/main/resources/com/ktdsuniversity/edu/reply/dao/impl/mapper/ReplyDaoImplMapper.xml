@@ -13,7 +13,6 @@
                          || LPAD(SEQ_REPLY_PK.NEXTVAL, 6, '0')
               FROM DUAL
         </selectKey>
-        
         INSERT INTO REPLY 
 		 (REPLY_ID
 		, BOARD_ID
@@ -52,6 +51,11 @@
                         autoMapping="true">
                 <id column="FILE_ID" property="fileId" />
             </collection>
+        </association>
+        <association property="memberVO"
+                     javaType="com.ktdsuniversity.edu.member.vo.MemberVO"
+                     autoMapping="true">
+            <id column="EMAIL" property="email" />
         </association>
     </resultMap>
     
@@ -93,5 +97,51 @@
 		WHERE R.DEL_YN = 'N'
 		  AND R.REPLY_ID = #{_parameter}
     </select>
+    
+    <select id="selectReplyListByBoardId"
+            parameterType="string"
+            resultMap="ReplyVOMap">
+         SELECT LEVEL
+		      , R.REPLY_ID
+		      , R.BOARD_ID
+		      , R.EMAIL
+		      , R.CONTENT
+		      , TO_CHAR(R.CRT_DT, 'YYYY-MM-DD HH24:MI:SS') AS CRT_DT
+		      , TO_CHAR(R.MDFY_DT, 'YYYY-MM-DD HH24:MI:SS') AS MDFY_DT
+		      , R.RECOMMEND_CNT
+		      , R.PARENT_REPLY_ID
+		      , R.DEL_YN
+		      , R.FILE_GROUP_ID
+		      , F.FILE_ID
+		      , F.FILE_SIZE
+		      , F.FILE_DISPLAY_NAME
+		      , F.FILE_NAME
+		      , F.FILE_PATH
+		      , F.FILE_DOWNLOAD_COUNT
+		      , F.FILE_TYPE
+		      , F.FILE_COUNT
+		      , M.NAME
+		   FROM REPLY R
+		   LEFT OUTER JOIN (SELECT F.FILE_ID
+		                         , F.FILE_GROUP_ID
+		                         , F.FILE_SIZE
+		                         , F.FILE_DISPLAY_NAME
+		                         , F.FILE_NAME
+		                         , F.FILE_PATH
+		                         , F.FILE_DOWNLOAD_COUNT
+		                         , F.FILE_TYPE
+		                         , FG.FILE_COUNT  
+		                      FROM FILE_GROUP FG
+		                     INNER JOIN "FILE" F
+		                        ON FG.FILE_GROUP_ID = F.FILE_GROUP_ID) F
+		     ON R.FILE_GROUP_ID = F.FILE_GROUP_ID 
+		  INNER JOIN MEMBER M
+		     ON R.EMAIL = M.EMAIL
+		  WHERE R.BOARD_ID = #{_parameter}
+		    AND M.DEL_YN = 'N'
+		  START WITH R.PARENT_REPLY_ID IS NULL
+		CONNECT BY PRIOR R.REPLY_ID = R.PARENT_REPLY_ID 
+    </select> 
+    
     
 </mapper>

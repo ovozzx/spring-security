@@ -1,5 +1,58 @@
 $().ready(function() {
 
+    // 게시글 아이디 가져오기
+    var boardId = $(".reply-area").data("board-id");
+    
+    // 댓글 조회 -> 계층조회
+    $.get("/reply/" + boardId, function(response) {
+        
+        var replyTemplate = $(".reply-template").html();
+        for (var i = 0; i < response.body.length; i++) {
+            var reply = response.body[i];
+            var replyHtml = 
+                replyTemplate.replace("#replyId#", reply.replyId)
+                             .replace("#replyAuthor#", reply.memberVO.name)
+                             .replace("#replyCreateDateTime#", reply.crtDt)
+                             .replace("#replyModifyDateTime#", reply.mdfyDt)
+                             .replace("#replyRecommendCount#", reply.recommendCnt)
+                             .replace("#replyContent#", reply.content);
+            if (reply.fileGroupId) {
+                replyHtml = replyHtml.replace("#fileGroupId#", reply.fileGroupId)
+                                     .replace("#fileId#", reply.fileGroupVO.file[0].fileId)
+                                     .replace("#replyAttachedFilename#", reply.fileGroupVO.file[0].fileDisplayName)
+                                     .replace("#replyAttachedFileDownloadCount#", reply.fileGroupVO.file[0].fileDownloadCount);
+            }
+            
+            var replyDom = $(replyHtml);
+            if (!reply.fileGroupId) {
+                replyDom.find(".attached-file").remove();
+            }
+            
+            var whoami = $("#login-user-email").text();
+            // 내가 작성한 댓글이라면 삭제하기, 수정하기, 댓글달기 만 보여준다.
+            if (whoami === reply.memberVO.email) {
+                replyDom.find(".reply-recommend").remove();
+            }
+            // 내가 작성한 댓글이 아니라면 추천하기, 댓글달기만 보여준다.
+            else {
+                replyDom.find(".reply-delete").remove();
+                replyDom.find(".reply-modify").remove();
+            }
+            
+            // 댓글에 댓글 달기
+            replyDom.find(".reply-reply").on("click", function() {
+                // 댓글 입력 창을 댓글 아래에 생성한다.
+                alert("댓글달기!");
+            });
+            
+            $(".replies").append(replyDom);
+        }
+    });
+    
+    // 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
+    // 댓글 삭제하기 --> 본인이 작성한 댓글만 삭제하게.
+    // 댓글 수정하기 --> 본인이 작성한 댓글만 수정하게.
+    
     $(".reply-area").children(".reply-input")
                     .find(".save-btn")
                     .on("click", function() {

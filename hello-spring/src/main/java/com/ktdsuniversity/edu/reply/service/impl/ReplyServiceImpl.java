@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.reply.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +53,12 @@ public class ReplyServiceImpl implements ReplyService {
 		ReplyVO insertedReply = this.replyDao.selectReplyByReplyId(
 										requestCreateReplyVO.getReplyId());
 		return insertedReply;
+	}
+
+	@Override
+	public List<ReplyVO> readReplyListByBoardId(String boardId) {
+		List<ReplyVO> replyList = this.replyDao.selectReplyListByBoardId(boardId);
+		return replyList;
 	}
 
 }

@@ -1,12 +1,15 @@
 package com.ktdsuniversity.edu.reply.vo;
 
 import com.ktdsuniversity.edu.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.member.vo.MemberVO;
 
 /**
  * @TableName REPLY
  * @TableComment null
  */
 public class ReplyVO {
+
+	private int level;
 
 	/**
 	 * @ColumnName REPLY_ID
@@ -79,6 +82,8 @@ public class ReplyVO {
 	private String fileGroupId;
 
 	private FileGroupVO fileGroupVO;
+
+	private MemberVO memberVO;
 
 	public String getReplyId() {
 		return this.replyId;
@@ -166,6 +171,22 @@ public class ReplyVO {
 
 	public void setFileGroupVO(FileGroupVO fileGroupVO) {
 		this.fileGroupVO = fileGroupVO;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public MemberVO getMemberVO() {
+		return memberVO;
+	}
+
+	public void setMemberVO(MemberVO memberVO) {
+		this.memberVO = memberVO;
 	}
 
 	@Override

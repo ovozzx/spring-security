@@ -28,6 +28,10 @@ pre.content {
 	flex-direction: row;
 }
 
+.flex-grow-1 {
+	flex-grow: 1;
+}
+
 .flex-end {
 	justify-content: flex-end;
 }
