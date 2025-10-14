@@ -13,4 +13,6 @@ public interface ReplyDao {
 
 	List<ReplyVO> selectReplyListByBoardId(String boardId);
 
+	int updateReplyRecommendByReplyId(String replyId);
+
 }

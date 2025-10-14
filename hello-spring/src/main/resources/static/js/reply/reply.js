@@ -28,6 +28,27 @@ $().ready(function() {
                 replyDom.find(".attached-file").remove();
             }
             
+            // 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
+            replyDom.find(".reply-recommend").on("click", function() {
+                var replyItem = $(this).closest("li");
+                var replyId = replyItem.data("reply-id");
+                $.get("/reply/" + replyId + "/recommend", function(response) {
+                    // 추천하기 응답은 추천한 댓글의 최종 추천수.
+                    replyItem.find(".recommend-count").text("추천: " + response.body);
+                });
+            });
+            
+            // 댓글 삭제하기 --> 본인이 작성한 댓글만 삭제하게.
+            replyDom.find(".reply-delete").on("click", function() {
+                // 삭제를 클릭하면 해당되는 댓글의 DEL_YN이 'N'으로 변경된다.
+                // 변경이 완료되면, 해당 댓글을 브라우저에서 제거한다.
+            });
+            
+            // 댓글 수정하기 --> 본인이 작성한 댓글만 수정하게.
+            replyDom.find(".reply-modify").on("click", function() {
+                
+            });
+            
             var whoami = $("#login-user-email").text();
             // 내가 작성한 댓글이라면 삭제하기, 수정하기, 댓글달기 만 보여준다.
             if (whoami === reply.memberVO.email) {
@@ -46,14 +67,16 @@ $().ready(function() {
                 $(".reply-input").find(".parent-reply-id").val($(this).closest("li").data("reply-id"));
             });
             
+            replyDom.css({
+                "margin-left": (reply.level - 1) * 20 + "px"
+            });
+            
             $(".replies").append(replyDom);
         }
     });
     
     // TODO 파일 다운로드 경로 수정. --> boardId ==> replyId
-    // 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
-    // 댓글 삭제하기 --> 본인이 작성한 댓글만 삭제하게.
-    // 댓글 수정하기 --> 본인이 작성한 댓글만 수정하게.
+    
     
     $(".reply-area").children(".reply-input")
                     .find(".save-btn")

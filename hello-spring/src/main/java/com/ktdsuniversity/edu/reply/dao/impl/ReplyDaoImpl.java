@@ -36,6 +36,11 @@ public class ReplyDaoImpl extends SqlSessionDaoSupport implements ReplyDao {
 	public List<ReplyVO> selectReplyListByBoardId(String boardId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectReplyListByBoardId", boardId);
 	}
+	
+	@Override
+	public int updateReplyRecommendByReplyId(String replyId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateReplyRecommendByReplyId", replyId);
+	}
 
 
 }

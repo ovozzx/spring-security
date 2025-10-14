@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
+import com.ktdsuniversity.edu.common.util.SessionUtil;
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
@@ -59,6 +61,28 @@ public class ReplyServiceImpl implements ReplyService {
 	public List<ReplyVO> readReplyListByBoardId(String boardId) {
 		List<ReplyVO> replyList = this.replyDao.selectReplyListByBoardId(boardId);
 		return replyList;
+	}
+	
+	@Transactional
+	@Override
+	public int updateReplyRecommendByReplyId(String replyId) {
+		String loginUser = SessionUtil.getLoginObject().getEmail();
+		
+		// replyId로 댓글 정보 조회.
+		String replyUser = this.replyDao.selectReplyByReplyId(replyId).getEmail();
+		
+		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
+		// 같다면 예외를 던짐.
+		if (loginUser.equals(replyUser)) {
+			throw new HelloSpringException("잘못된 접근입니다.", "error/404");
+		}
+		
+		// 다르다면 추천수를 증가
+		int updateCount = this.replyDao.updateReplyRecommendByReplyId(replyId);
+		
+		// 다시 replyId로 댓글 정보 조회.
+		// 조회된 댓글의 추천수만 반환
+		return this.replyDao.selectReplyByReplyId(replyId).getRecommendCnt();
 	}
 
 }

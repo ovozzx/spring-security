@@ -67,7 +67,7 @@
                                 <div class="flex-grow-1">#replyAuthor#</div>
                                 <div>작성: #replyCreateDateTime#</div>
                                 <div>수정: #replyModifyDateTime#</div>
-                                <div>추천: #replyRecommendCount#</div>
+                                <div class="recommend-count">추천: #replyRecommendCount#</div>
                             </div>
                             <pre class="content">#replyContent#</pre>
                             <div class="attached-file">

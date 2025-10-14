@@ -51,6 +51,19 @@ public class ReplyController {
     	return replyResponse;
     }
     
+    @GetMapping("/reply/{replyId}/recommend")
+    @ResponseBody
+    public AjaxResponse doRecommendReplyAction(@PathVariable String replyId) {
+    	
+    	int latestRecommendCount = 
+    			this.replyService.updateReplyRecommendByReplyId(replyId);
+    	
+    	AjaxResponse recommendResponse = new AjaxResponse();
+    	recommendResponse.setBody(latestRecommendCount);
+    	return recommendResponse;
+    }
+    
+    
 }
 
 

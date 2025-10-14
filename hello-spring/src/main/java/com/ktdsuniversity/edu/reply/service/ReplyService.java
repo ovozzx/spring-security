@@ -11,4 +11,6 @@ public interface ReplyService {
 
 	List<ReplyVO> readReplyListByBoardId(String boardId);
 
+	int updateReplyRecommendByReplyId(String replyId);
+
 }

@@ -143,5 +143,11 @@
 		CONNECT BY PRIOR R.REPLY_ID = R.PARENT_REPLY_ID 
     </select> 
     
+    <update id="updateReplyRecommendByReplyId"
+            parameterType="string">
+        UPDATE REPLY
+		   SET RECOMMEND_CNT = RECOMMEND_CNT + 1
+		 WHERE REPLY_ID = #{_parameter}
+    </update>
     
 </mapper>

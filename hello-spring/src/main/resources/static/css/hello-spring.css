@@ -203,9 +203,16 @@ div.board-view {
         grid-column: 1 / -1;
         
         & > .replies {
+            background-color: #eee;
             margin: 0;
             padding: 0;
             list-style: none;
+            
+            & > li {
+                border-top: 1px solid #bbb;
+                padding: 10px 0;
+                background-color: #fff;
+            }
         }
     }
 }
