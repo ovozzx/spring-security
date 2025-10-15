@@ -39,9 +39,9 @@ $().ready(function() {
     $(".paginator").find(".page-list-size")
                    .on("change", function() {
                     
-                    var searchFormClass = $(this).closest(".paginator")
-                                                 .data("search-form-class");
-                    var searchParam = $(searchFormClass).serialize();
+                        var searchFormClass = $(this).closest(".paginator")
+                                                     .data("search-form-class");
+                        var searchParam = $(searchFormClass).serialize();
                     
                         window.location.href = 
                                     window.location.pathname 
