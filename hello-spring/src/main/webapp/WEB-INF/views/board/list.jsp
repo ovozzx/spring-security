@@ -16,6 +16,7 @@
       href="/css/hello-spring.css" />
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="/js/board/list.js"></script>
+<script type="text/javascript" src="/js/common/paginator.js"></script>
 </head>
 <body>
 
@@ -69,17 +70,67 @@
 	        </tbody>
 	    </table>
 	    
-	    <ul class="paginator">
-	       <c:forEach begin="0"
-	                  end="${search.pageCount - 1}"
+	    <form class="board-search-form">
+	       <select name="searchType">
+	           <option value="name" ${search.searchType eq "name" ? "selected" : ""}>작성자명</option>
+	           <option value="subject_content" ${search.searchType eq "subject_content" ? "selected" : ""}>제목+내용</option>
+	           <option value="subject" ${search.searchType eq "subject" ? "selected" : ""}>제목</option>
+	           <option value="content" ${search.searchType eq "content" ? "selected" : ""}>내용</option>
+	       </select>
+	       <input type="text" name="searchKeyword" value="${search.searchKeyword}" />
+	       <button type="button" class="search-button">검색</button>
+	    </form>
+	    
+	    <ul class="paginator"
+	        data-search-form-class=".board-search-form">
+	       <li>
+	           <select class="page-list-size">
+	               <option value="10" ${search.listSize eq "10" ? "selected" : ""}>10</option>
+	               <option value="20" ${search.listSize eq "20" ? "selected" : ""}>20</option>
+	               <option value="30" ${search.listSize eq "30" ? "selected" : ""}>30</option>
+	               <option value="40" ${search.listSize eq "40" ? "selected" : ""}>40</option>
+	               <option value="50" ${search.listSize eq "50" ? "selected" : ""}>50</option>
+	               <option value="100" ${search.listSize eq "100" ? "selected" : ""}>100</option>
+	           </select>
+	       </li>
+	       
+	       <c:if test="${search.havePrevPageGroup}">
+	           <li>
+                   <a data-page-no="0">
+                       처음
+                   </a>
+               </li>
+	           <li>
+                   <a data-page-no="${search.prevGroupStartPageNo}">
+                       이전
+                   </a>
+               </li>
+	       </c:if>
+	       
+	       <c:forEach begin="${search.groupStartPageNo}"
+	                  end="${search.groupEndPageNo}"
 	                  step="1"
 	                  var="page">
-	           <li>
-	               <a href="/list?pageNo=${page}&listSize=${search.listSize}">
+	           <li class="${search.pageNo eq page ? "active" : ""}">
+	               <a data-page-no="${page}">
 	                   ${page + 1}
 	               </a>
 	           </li>
 	       </c:forEach>
+	       
+	       <c:if test="${search.haveNextPageGroup}">
+               <li>
+                   <a data-page-no="${search.nextGroupStartPageNo}">
+                       다음
+                   </a>
+               </li>
+               <li>
+                   <a data-page-no="${search.pageCount-1}">
+                       마지막
+                   </a>
+               </li>
+           </c:if>
+	       
 	    </ul>
 	    
 	    <div class="btn-group">

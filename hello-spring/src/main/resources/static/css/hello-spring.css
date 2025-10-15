@@ -274,6 +274,22 @@ div.grid {
 	}
 }
 
+.paginator {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	list-style: none;
+	justify-content: center;
+	
+	& > .active {
+	    & > a {
+		    color: #F00;
+		    font-weight: 600;
+        }
+	}
+}
+
+
 
 
 
