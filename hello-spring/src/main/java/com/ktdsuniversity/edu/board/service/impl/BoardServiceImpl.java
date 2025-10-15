@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.board.service.BoardService;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SessionUtil;
@@ -37,13 +38,14 @@ public class BoardServiceImpl implements BoardService {
 	private FileDao fileDao;
 	
 	@Override
-	public ResponseBoardListVO readBoardList() {
+	public ResponseBoardListVO readBoardList(RequestSearchBoardVO requestSearchBoardVO) {
 		
 		// 게시글의 개수 필요.
-		int count = this.boardDao.selectBoardCount();
+		int count = this.boardDao.selectBoardCount(requestSearchBoardVO);
+		requestSearchBoardVO.setPageCount(count);
 		
 		// 게시글의 목록 필요.
-		List<BoardVO> list = this.boardDao.selectBoardList();
+		List<BoardVO> list = this.boardDao.selectBoardList(requestSearchBoardVO);
 		
 		// 게시글의 개수 + 게시글의 목록 반환.
 		ResponseBoardListVO result = new ResponseBoardListVO();

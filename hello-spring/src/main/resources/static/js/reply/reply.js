@@ -37,8 +37,13 @@ $().ready(function() {
                 var replyItem = $(this).closest("li");
                 var replyId = replyItem.data("reply-id");
                 $.get("/reply/" + replyId + "/recommend", function(response) {
-                    // 추천하기 응답은 추천한 댓글의 최종 추천수.
-                    replyItem.find(".recommend-count").text("추천: " + response.body);
+                    if (response.body) {
+                        // 추천하기 응답은 추천한 댓글의 최종 추천수.
+                        replyItem.find(".recommend-count").text("추천: " + response.body);
+                    }
+                    else if (response.error) {
+                        alert(response.error.message);
+                    }
                 });
             });
             
@@ -47,7 +52,12 @@ $().ready(function() {
                 var replyItem = $(this).closest("li");
                 var replyId = replyItem.data("reply-id");
                 $.get("/reply/" + replyId + "/delete", function(response) {
-                    replyItem.remove();
+                    if (response.body) {
+                        replyItem.remove();
+                    }
+                    else if (response.error) {
+                        alert(response.error.message);
+                    }
                 });
             });
             
@@ -130,10 +140,12 @@ $().ready(function() {
                         replyContent = replyContent.trim();
                         replyInput.find("#reply-content").val(replyContent);
                         
+                        
                         if (replyContent === "") {
                             replyInput.find("#reply-content").trigger("keyup")
                             return;
                         }
+                        
                         
                         // 3. Ajax 전송 (/reply/게시글아이디)
                         // 첨부파일 데이터 + 댓글 내용 데이터
@@ -185,7 +197,18 @@ $().ready(function() {
                             success: function(response) {
                                 // 4. 댓글 성공 여부를 반환.
                                 console.log(response);
-                                window.location.reload();
+                                if (response.body) {
+                                    window.location.reload();
+                                }
+                                else if (response.error) {
+                                    var errors = response.error.error;
+                                    // ECMA Script
+                                    var errorMessages = errors.map(function(eachError) {
+                                        return eachError.defaultMessage;
+                                    });
+                                    
+                                    alert(errorMessages.join(", "));
+                                }
                             }
                         });
                     });

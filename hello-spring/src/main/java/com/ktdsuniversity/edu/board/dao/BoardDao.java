@@ -5,6 +5,7 @@ import java.util.List;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 
 /**
  * Database에서 Insert, Select, Update, Delete를 수행 요청하는 인터페이스.
@@ -13,9 +14,9 @@ import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
  */
 public interface BoardDao {
 
-	public int selectBoardCount();
+	public int selectBoardCount(RequestSearchBoardVO requestSearchBoardVO);
 	
-	public List<BoardVO> selectBoardList();
+	public List<BoardVO> selectBoardList(RequestSearchBoardVO requestSearchBoardVO);
 
 	public int insertNewBoard(RequestCreateBoardVO requestCreateBoardVO);
 

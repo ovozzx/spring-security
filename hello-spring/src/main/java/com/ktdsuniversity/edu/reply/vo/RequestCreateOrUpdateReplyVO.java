@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.reply.vo;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class RequestCreateOrUpdateReplyVO {
 
 	private String replyId;
@@ -10,6 +12,8 @@ public class RequestCreateOrUpdateReplyVO {
 
 	private String boardId;
 	private MultipartFile replyAttachFile;
+	
+	@NotEmpty(message = "댓글의 내용을 작성해주세요.")
 	private String replyContent;
 	private String fileGroupId;
 	private String email;

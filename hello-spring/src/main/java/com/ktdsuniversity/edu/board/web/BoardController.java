@@ -32,6 +32,7 @@ import com.ktdsuniversity.edu.board.vo.BoardExcelVO;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
@@ -52,11 +53,15 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	// http://localhost:8080/list?pageNo=0&listSize=20
 	@GetMapping("/list")
-	public String viewBoardListPage(Model model) {
-		ResponseBoardListVO result = this.boardService.readBoardList();
+	public String viewBoardListPage(
+			Model model, 
+			RequestSearchBoardVO requestSearchBoardVO) {
+		
+		ResponseBoardListVO result = this.boardService.readBoardList(requestSearchBoardVO);
 		model.addAttribute("list", result);
-
+		model.addAttribute("search", requestSearchBoardVO);
 		// /WEB-INF/views/board/list.jsp
 		return "board/list";
 	}

@@ -69,6 +69,19 @@
 	        </tbody>
 	    </table>
 	    
+	    <ul class="paginator">
+	       <c:forEach begin="0"
+	                  end="${search.pageCount - 1}"
+	                  step="1"
+	                  var="page">
+	           <li>
+	               <a href="/list?pageNo=${page}&listSize=${search.listSize}">
+	                   ${page + 1}
+	               </a>
+	           </li>
+	       </c:forEach>
+	    </ul>
+	    
 	    <div class="btn-group">
 	       <div class="right-align">
 	           <c:if test="${not empty sessionScope.__LOGIN_USER__}">

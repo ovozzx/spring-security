@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.board.dao.BoardDao;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 
 @Repository
 public class BoardDaoImpl 
@@ -26,13 +27,13 @@ public class BoardDaoImpl
 	}
 	
 	@Override
-	public int selectBoardCount() {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBoardCount");
+	public int selectBoardCount(RequestSearchBoardVO requestSearchBoardVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBoardCount", requestSearchBoardVO);
 	}
 
 	@Override
-	public List<BoardVO> selectBoardList() {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBoardList");
+	public List<BoardVO> selectBoardList(RequestSearchBoardVO requestSearchBoardVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBoardList", requestSearchBoardVO);
 	}
 
 	@Override

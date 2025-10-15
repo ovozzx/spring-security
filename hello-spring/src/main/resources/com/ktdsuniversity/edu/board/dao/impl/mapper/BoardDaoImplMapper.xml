@@ -4,7 +4,9 @@
 <mapper
 	namespace="com.ktdsuniversity.edu.board.dao.impl.BoardDaoImpl">
 
-	<select id="selectBoardCount" resultType="_int">
+	<select id="selectBoardCount" 
+	        resultType="_int"
+	        parameterType="com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO">
 	   SELECT COUNT(B.ID)
          FROM BOARD B
         INNER JOIN "MEMBER" M
@@ -14,7 +16,9 @@
 	</select>
 
 	<select id="selectBoardList"
-		resultMap="BoardVOMap">
+		resultMap="BoardVOMap"
+		parameterType="com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO">
+	   <include refid="Common.paginationHeader" />
 	   SELECT ROW_NUMBER() OVER(ORDER BY B.ID) "NUMBER"
 		    , B.ID
 		    , B.SUBJECT
@@ -31,6 +35,7 @@
 		WHERE B.DEL_YN = 'N'
 		  AND M.DEL_YN = 'N'
 		ORDER BY "NUMBER" DESC
+	   <include refid="Common.paginationFooter" />
 	</select>
 	
 	<insert id="insertNewBoard"

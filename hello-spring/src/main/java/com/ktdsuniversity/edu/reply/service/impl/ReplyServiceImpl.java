@@ -3,9 +3,11 @@ package com.ktdsuniversity.edu.reply.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.common.exceptions.AjaxException;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SessionUtil;
 import com.ktdsuniversity.edu.file.dao.FileDao;
@@ -59,6 +61,11 @@ public class ReplyServiceImpl implements ReplyService {
 			ReplyVO replyVO = this.replyDao.selectReplyByReplyId(
 					requestCreateOrUpdateReplyVO.getReplyId());
 			
+			// 내가 쓴 것인지 확인 필요.
+			if ( ! replyVO.getEmail().equals(requestCreateOrUpdateReplyVO.getEmail())) {
+				throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+			}
+			
 			String deleteFileId = requestCreateOrUpdateReplyVO.getDeleteFileId();
 			if (uploadFile == null && deleteFileId != null) {
 				requestCreateOrUpdateReplyVO.setFileGroupId(null);
@@ -91,12 +98,15 @@ public class ReplyServiceImpl implements ReplyService {
 		String loginUser = SessionUtil.getLoginObject().getEmail();
 		
 		// replyId로 댓글 정보 조회.
-		String replyUser = this.replyDao.selectReplyByReplyId(replyId).getEmail();
+		ReplyVO replyVO = this.replyDao.selectReplyByReplyId(replyId);
+		if (replyVO == null) {
+			throw new AjaxException("삭제된 댓글입니다.", HttpStatus.NOT_FOUND);
+		}
 		
 		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
 		// 같다면 예외를 던짐.
-		if (loginUser.equals(replyUser)) {
-			throw new HelloSpringException("잘못된 접근입니다.", "error/404");
+		if (loginUser.equals(replyVO.getEmail())) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		// 다르다면 추천수를 증가
@@ -107,17 +117,21 @@ public class ReplyServiceImpl implements ReplyService {
 		return this.replyDao.selectReplyByReplyId(replyId).getRecommendCnt();
 	}
 
+	@Transactional
 	@Override
 	public boolean deleteReplyByReplyId(String replyId) {
 		String loginUser = SessionUtil.getLoginObject().getEmail();
 		
 		// replyId로 댓글 정보 조회.
-		String replyUser = this.replyDao.selectReplyByReplyId(replyId).getEmail();
+		ReplyVO replyVO = this.replyDao.selectReplyByReplyId(replyId);
+		if (replyVO == null) {
+			throw new AjaxException("이미 삭제된 댓글입니다.", HttpStatus.NOT_FOUND);
+		}
 		
 		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
 		// 다르다면 예외를 던짐.
-		if (!loginUser.equals(replyUser)) {
-			throw new HelloSpringException("잘못된 접근입니다.", "error/404");
+		if (!loginUser.equals(replyVO.getEmail())) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		// 같다면 삭제

@@ -5,11 +5,12 @@ import java.util.List;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
+import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 
 public interface BoardService {
 
-	public ResponseBoardListVO readBoardList();
+	public ResponseBoardListVO readBoardList(RequestSearchBoardVO requestSearchBoardVO);
 
 	public boolean createNewBoard(RequestCreateBoardVO requestCreateBoardVO);
 
