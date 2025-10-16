@@ -67,7 +67,7 @@ public class BoardControllerTest {
 	public void doWriteBoardActionTestWithFile() throws Exception {
 		
 		// given
-		BDDMockito.given(this.boardService.createNewBoard(any()))
+		BDDMockito.given(this.boardService.createNewBoard(any(RequestCreateBoardVO.class)))
 				  .will((obj) -> {
 					  // this.boardService.createNewBoard 로 전달된 파라미터 받아오기
 					  RequestCreateBoardVO vo = (RequestCreateBoardVO) obj.getArgument(0);
