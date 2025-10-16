@@ -68,7 +68,13 @@ public class BoardControllerTest {
 		
 		// given
 		BDDMockito.given(this.boardService.createNewBoard(any()))
-				  .willReturn(true);
+				  .will((obj) -> {
+					  // this.boardService.createNewBoard 로 전달된 파라미터 받아오기
+					  RequestCreateBoardVO vo = (RequestCreateBoardVO) obj.getArgument(0);
+					  vo.setId("test-id");
+					  return true;
+				  });
+//				  .willReturn(true);
 		
 		MockHttpSession session = new MockHttpSession();
 		session.setAttribute("__LOGIN_USER__", new MemberVO());
@@ -85,7 +91,7 @@ public class BoardControllerTest {
 							.file(mockFile)
 							.param("subject", "테스트")
 							// id 생성 안되므로 파라미터로 전달.
-							.param("id", "test-id") 
+//							.param("id", "test-id") 
 							.param("content", "테스트")
 							.session(session) )
 				.andDo(print())
