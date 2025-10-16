@@ -90,8 +90,6 @@ public class BoardControllerTest {
 		this.mvc.perform( multipart("/write")
 							.file(mockFile)
 							.param("subject", "테스트")
-							// id 생성 안되므로 파라미터로 전달.
-//							.param("id", "test-id") 
 							.param("content", "테스트")
 							.session(session) )
 				.andDo(print())
