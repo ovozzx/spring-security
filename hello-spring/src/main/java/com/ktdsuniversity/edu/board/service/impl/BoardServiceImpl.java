@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.board.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,23 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public ResponseBoardListVO readBoardList(RequestSearchBoardVO requestSearchBoardVO) {
+		
+		if (requestSearchBoardVO.getFrom() == null) {
+			requestSearchBoardVO.setFrom(LocalDate.now().minusMonths(1).toString());
+		}
+		if (requestSearchBoardVO.getTo() == null) {
+			requestSearchBoardVO.setTo(LocalDate.now().toString());
+		}
+		
+		LocalDate fromDate = LocalDate.parse(requestSearchBoardVO.getFrom());
+		LocalDate toDate = LocalDate.parse(requestSearchBoardVO.getTo());
+		
+		if (fromDate.isAfter(toDate)) {
+			fromDate = toDate;
+		}
+		requestSearchBoardVO.setFrom(fromDate.toString());
+		requestSearchBoardVO.setTo(toDate.toString());
+		
 		
 		// 게시글의 개수 필요.
 		int count = this.boardDao.selectBoardCount(requestSearchBoardVO);

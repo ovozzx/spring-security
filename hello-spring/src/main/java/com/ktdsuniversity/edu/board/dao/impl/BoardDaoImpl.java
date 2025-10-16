@@ -38,6 +38,9 @@ public class BoardDaoImpl
 
 	@Override
 	public int insertNewBoard(RequestCreateBoardVO requestCreateBoardVO) {
+		if (requestCreateBoardVO == null) {
+			return 0;
+		}
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewBoard", requestCreateBoardVO);
 	}
 

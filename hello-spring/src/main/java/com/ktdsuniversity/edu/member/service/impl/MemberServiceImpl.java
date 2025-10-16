@@ -1,8 +1,8 @@
 package com.ktdsuniversity.edu.member.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SHAEncrypter;
@@ -21,6 +21,10 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
 	@Override
 	public boolean createNewMember(RequestRegistMemberVO requestRegistMemberVO) {
+    	if (requestRegistMemberVO == null) {
+    		return false;
+    	}
+    	
 		int emailCount = this.memberDao.selectMemberCountByEmail( requestRegistMemberVO.getEmail() );
 		if (emailCount == 1) {
 			throw new HelloSpringException("이미 존재하는 이메일입니다.", "member/regist", "registData", requestRegistMemberVO);
@@ -30,7 +34,11 @@ public class MemberServiceImpl implements MemberService {
 		// SALT 발급.
 		String salt = SHAEncrypter.generateSalt();
 		// SALT를 이용해 비밀번호 암호화.
-		String encryptedPassword = SHAEncrypter.getEncrypt(requestRegistMemberVO.getPassword(), salt);
+		String password = requestRegistMemberVO.getPassword();
+		if (password == null) {
+			return false;
+		}
+		String encryptedPassword = SHAEncrypter.getEncrypt(password, salt);
 		
 		requestRegistMemberVO.setPassword(encryptedPassword);
 		requestRegistMemberVO.setSalt(salt);

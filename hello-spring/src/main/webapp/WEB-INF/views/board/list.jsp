@@ -15,6 +15,7 @@
       rel="stylesheet" 
       href="/css/hello-spring.css" />
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="/js/common/common.js"></script>
 <script type="text/javascript" src="/js/board/list.js"></script>
 <script type="text/javascript" src="/js/common/paginator.js"></script>
 </head>
@@ -71,6 +72,8 @@
 	    </table>
 	    
 	    <form class="board-search-form">
+	       <input type="date" name="from" class="from" value="${search.from}" /> ~ 
+	       <input type="date" name="to" class="to" value="${search.to}" />
 	       <select name="searchType">
 	           <option value="name" ${search.searchType eq "name" ? "selected" : ""}>작성자명</option>
 	           <option value="subject_content" ${search.searchType eq "subject_content" ? "selected" : ""}>제목+내용</option>

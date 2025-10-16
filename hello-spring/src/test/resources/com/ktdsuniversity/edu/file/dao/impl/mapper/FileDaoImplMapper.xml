@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktdsuniversity.edu.file.dao.impl.FileDaoImpl">
+    
+    <insert id="insertFile"
+            parameterType="com.ktdsuniversity.edu.file.vo.FileVO">
+        <selectKey keyProperty="fileId"
+                   resultType="string"
+                   order="BEFORE">
+            SELECT 'FL-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_FILE_PK.NEXTVAL, 6, '0')
+              FROM DUAL
+        </selectKey>
+        INSERT INTO "FILE" 
+		 (FILE_ID
+		, FILE_GROUP_ID
+		, FILE_SIZE
+		, FILE_DISPLAY_NAME
+		, FILE_NAME
+		, FILE_PATH
+		, FILE_DOWNLOAD_COUNT
+		, FILE_TYPE) 
+		VALUES
+		 (#{fileId}
+		, #{fileGroupId}
+		, #{fileSize}
+		, #{fileDisplayName}
+		, #{fileName}
+		, #{filePath}
+		, 0 
+		, #{fileType})
+    </insert>
+    
+    <update id="updateDownloadCount"
+            parameterType="com.ktdsuniversity.edu.file.vo.RequestDownloadVO">
+        UPDATE "FILE"
+		   SET FILE_DOWNLOAD_COUNT = FILE_DOWNLOAD_COUNT + 1
+		 WHERE FILE_ID = #{fileId}
+		   AND FILE_GROUP_ID = #{fileGroupId}
+		   AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
+								  FROM BOARD
+								 WHERE ID = #{id}
+								 UNION ALL 
+								SELECT FILE_GROUP_ID
+								  FROM REPLY
+								 WHERE REPLY_ID = #{id})
+    </update>
+    
+    <select id="selectFileVO"
+            parameterType="com.ktdsuniversity.edu.file.vo.RequestDownloadVO"
+            resultType="com.ktdsuniversity.edu.file.vo.FileVO">
+        SELECT FILE_ID
+             , FILE_GROUP_ID
+             , FILE_SIZE
+             , FILE_DISPLAY_NAME
+             , FILE_NAME
+             , FILE_PATH
+             , FILE_DOWNLOAD_COUNT
+             , FILE_TYPE
+          FROM "FILE"
+         WHERE FILE_ID = #{fileId}
+           AND FILE_GROUP_ID = #{fileGroupId}
+           AND FILE_GROUP_ID = (SELECT FILE_GROUP_ID
+                                  FROM BOARD
+                                 WHERE ID = #{id}
+                                 UNION ALL 
+                                SELECT FILE_GROUP_ID
+                                  FROM REPLY
+                                 WHERE REPLY_ID = #{id})
+    </select>
+    
+    <delete id="deleteFile"
+            parameterType="string">
+        DELETE 
+          FROM "FILE"
+         WHERE FILE_ID = #{_parameter}
+    </delete>
+    
+    
+    
+</mapper>

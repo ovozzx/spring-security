@@ -4,11 +4,30 @@ import com.ktdsuniversity.edu.common.vo.AbstractSearchVO;
 
 public class RequestSearchBoardVO extends AbstractSearchVO {
 
+	private String from;
+	private String to;
+
 	private String searchType;
 	private String searchKeyword;
 
+	public String getFrom() {
+		return this.from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getTo() {
+		return this.to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
+	}
+
 	public String getSearchType() {
-		return searchType;
+		return this.searchType;
 	}
 
 	public void setSearchType(String searchType) {
@@ -16,7 +35,7 @@ public class RequestSearchBoardVO extends AbstractSearchVO {
 	}
 
 	public String getSearchKeyword() {
-		return searchKeyword;
+		return this.searchKeyword;
 	}
 
 	public void setSearchKeyword(String searchKeyword) {

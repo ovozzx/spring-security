@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.common.exceptions.AjaxException;
-import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SessionUtil;
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;

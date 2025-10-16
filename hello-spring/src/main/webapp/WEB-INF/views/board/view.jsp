@@ -8,6 +8,7 @@
         <title>Insert title here</title>
         <link type="text/css" rel="stylesheet" href="/css/hello-spring.css" />
         <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="/js/common/common.js"></script>
         <script type="text/javascript" src="/js/reply/reply.js"></script>
         <script type="text/javascript" src="/js/common/validate.js"></script>
     </head>

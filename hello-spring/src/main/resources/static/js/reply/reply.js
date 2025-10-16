@@ -1,7 +1,3 @@
-String.prototype.replaceAll = function(findText, replaceText) {
-    return this.split(findText).join(replaceText);
-};
-
 $().ready(function() {
 
     // 게시글 아이디 가져오기
