@@ -18,12 +18,31 @@
 <script type="text/javascript" src="/js/common/common.js"></script>
 <script type="text/javascript" src="/js/board/list.js"></script>
 <script type="text/javascript" src="/js/common/paginator.js"></script>
-<script type="text/javascript" src="/js/sockjs/sockjs.min.js"></script>
-<script type="text/javascript" src="/js/sockjs/sockjs.min.js.map"></script>
-<script type="text/javascript" src="/js/sockjs/chat.js"></script>
+<c:if test="${not empty sessionScope.__LOGIN_USER__}">
+	<script type="text/javascript" src="/js/sockjs/sockjs.min.js"></script>
+	<script type="text/javascript" src="/js/sockjs/chat.js"></script>
+</c:if>
 </head>
 <body>
-
+    
+    <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+        <div class="chat">
+	        <ul class="history"></ul>
+	        <div class="chat-message-input">
+	            <input type="hidden" 
+                       class="user-email" 
+                       value="${sessionScope.__LOGIN_USER__.email}" />
+	            <input type="hidden" 
+	                   class="user-name" 
+	                   value="${sessionScope.__LOGIN_USER__.name}" />
+	            <input type="text" class="message" />
+	        </div>
+	    </div>
+    </c:if>
+    
+    
+     
+    
     <div class="wrapper">
         <jsp:include page="../member/memberloginlogout.jsp" />
 	    <h1 class="page-title">게시글 목록</h1>
@@ -58,7 +77,7 @@
 		                        <td>
 		                          <a href="/view/${article.id}"><c:out value="${article.subject}" /></a>
 		                        </td>
-		                        <td>${article.memberVO.name}</td>
+		                        <td class="request-chat" data-email="${article.memberVO.email}">${article.memberVO.name}</td>
 		                        <td>${article.viewCnt}</td>
 		                        <td>${article.crtDt}</td>
 		                        <td>${article.mdfyDt}</td>

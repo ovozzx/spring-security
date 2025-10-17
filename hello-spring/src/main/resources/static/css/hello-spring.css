@@ -289,7 +289,27 @@ div.grid {
 	}
 }
 
-
+.chat {
+	& > .history {
+	   display: flex;
+	   flex-direction: column;
+	   
+	   padding: 0;
+	   margin: 0;
+	   list-style: none;
+	   
+	   & > li {
+	       display: flex;
+	       flex-direction: row;
+	       
+	       justify-content: flex-start;
+	       
+	       &.my-chat {
+	           justify-content: flex-end;
+	       }
+	   }
+	}
+}
 
 
 
