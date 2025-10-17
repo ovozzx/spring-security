@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -86,6 +85,13 @@ public class BoardControllerTest {
 						"image/png",  // 파일 타입
 						new byte[10] // 파일 내용
 				);
+		
+		/**
+		 * Java Servlet
+		 * 	-> Request 의 두 가지 종류
+		 * 		-> 일반 Request : HttpServletRequest
+		 * 		-> MultipartRequest : MultipartHttpServletRequest
+		 */
 		
 		this.mvc.perform( multipart("/write")
 							.file(mockFile)

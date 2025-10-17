@@ -19,6 +19,22 @@
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%method[%line] -%kvp- %msg%n</pattern>
     </encoder>
   </appender> 
+  
+  <appender name="CHAT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${user.home}/spring/hello-spring/logs/chat.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${user.home}/spring/hello-spring/logs/chat.%d{yyyy-MM-dd}.log</fileNamePattern>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%method[%line] -%kvp- %msg%n</pattern>
+    </encoder>
+  </appender> 
+  
+  <logger name="CHAT" level="INFO">
+    <appender-ref ref="CHAT_FILE" />
+  </logger>
 
   <root level="DUBUG">
     <appender-ref ref="FILE" />

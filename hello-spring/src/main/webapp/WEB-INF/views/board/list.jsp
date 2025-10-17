@@ -18,6 +18,9 @@
 <script type="text/javascript" src="/js/common/common.js"></script>
 <script type="text/javascript" src="/js/board/list.js"></script>
 <script type="text/javascript" src="/js/common/paginator.js"></script>
+<script type="text/javascript" src="/js/sockjs/sockjs.min.js"></script>
+<script type="text/javascript" src="/js/sockjs/sockjs.min.js.map"></script>
+<script type="text/javascript" src="/js/sockjs/chat.js"></script>
 </head>
 <body>
 
