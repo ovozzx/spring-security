@@ -6,45 +6,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link type="text/css" 
-      rel="stylesheet" 
-      href="/css/hello-spring.css" />
-<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-<script type="text/javascript" src="/js/common/common.js"></script>
-<script type="text/javascript" src="/js/board/list.js"></script>
-<script type="text/javascript" src="/js/common/paginator.js"></script>
-<c:if test="${not empty sessionScope.__LOGIN_USER__}">
-	<script type="text/javascript" src="/js/sockjs/sockjs.min.js"></script>
-	<script type="text/javascript" src="/js/sockjs/chat.js"></script>
-</c:if>
-</head>
-<body>
+    <jsp:include page="/WEB-INF/views/layout/header.jsp">
+        <jsp:param value="게시글 목록" name="title" />
+        <jsp:param value="
+            <script type='text/javascript' src='/js/board/list.js'></script>
+        " name="scripts"/>
+    </jsp:include>
     
-    <c:if test="${not empty sessionScope.__LOGIN_USER__}">
-        <div class="chat">
-	        <ul class="history"></ul>
-	        <div class="chat-message-input">
-	            <input type="hidden" 
-                       class="user-email" 
-                       value="${sessionScope.__LOGIN_USER__.email}" />
-	            <input type="hidden" 
-	                   class="user-name" 
-	                   value="${sessionScope.__LOGIN_USER__.name}" />
-	            <input type="text" class="message" />
-	        </div>
-	    </div>
-    </c:if>
-    
-    
-     
-    
-    <div class="wrapper">
-        <jsp:include page="../member/memberloginlogout.jsp" />
 	    <h1 class="page-title">게시글 목록</h1>
 	    <div>검색된 게시글의 수: ${list.count}개</div>
 	    
@@ -106,57 +74,16 @@
 	       <button type="button" class="search-button">검색</button>
 	    </form>
 	    
-	    <ul class="paginator"
-	        data-search-form-class=".board-search-form">
-	       <li>
-	           <select class="page-list-size">
-	               <option value="10" ${search.listSize eq "10" ? "selected" : ""}>10</option>
-	               <option value="20" ${search.listSize eq "20" ? "selected" : ""}>20</option>
-	               <option value="30" ${search.listSize eq "30" ? "selected" : ""}>30</option>
-	               <option value="40" ${search.listSize eq "40" ? "selected" : ""}>40</option>
-	               <option value="50" ${search.listSize eq "50" ? "selected" : ""}>50</option>
-	               <option value="100" ${search.listSize eq "100" ? "selected" : ""}>100</option>
-	           </select>
-	       </li>
-	       
-	       <c:if test="${search.havePrevPageGroup}">
-	           <li>
-                   <a data-page-no="0">
-                       처음
-                   </a>
-               </li>
-	           <li>
-                   <a data-page-no="${search.prevGroupStartPageNo}">
-                       이전
-                   </a>
-               </li>
-	       </c:if>
-	       
-	       <c:forEach begin="${search.groupStartPageNo}"
-	                  end="${search.groupEndPageNo}"
-	                  step="1"
-	                  var="page">
-	           <li class="${search.pageNo eq page ? "active" : ""}">
-	               <a data-page-no="${page}">
-	                   ${page + 1}
-	               </a>
-	           </li>
-	       </c:forEach>
-	       
-	       <c:if test="${search.haveNextPageGroup}">
-               <li>
-                   <a data-page-no="${search.nextGroupStartPageNo}">
-                       다음
-                   </a>
-               </li>
-               <li>
-                   <a data-page-no="${search.pageCount-1}">
-                       마지막
-                   </a>
-               </li>
-           </c:if>
-	       
-	    </ul>
+	    <jsp:include page="/WEB-INF/views/layout/paginator.jsp">
+	       <jsp:param value="${search.listSize}" name="listSize"/>
+	       <jsp:param value="${search.havePrevPageGroup}" name="havePrevPageGroup"/>
+	       <jsp:param value="${search.prevGroupStartPageNo}" name="prevGroupStartPageNo"/>
+	       <jsp:param value="${search.groupStartPageNo}" name="groupStartPageNo"/>
+	       <jsp:param value="${search.groupEndPageNo}" name="groupEndPageNo"/>
+	       <jsp:param value="${search.haveNextPageGroup}" name="haveNextPageGroup"/>
+	       <jsp:param value="${search.nextGroupStartPageNo}" name="nextGroupStartPageNo"/>
+	       <jsp:param value="${search.pageCount}" name="pageCount"/>
+	    </jsp:include>
 	    
 	    <div class="btn-group">
 	       <div class="right-align">
@@ -168,7 +95,4 @@
 	       </div>
 	    </div>
 	    
-    </div>
-
-</body>
-</html>
+    <jsp:include page="/WEB-INF/views/layout/footer.jsp" />
