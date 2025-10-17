@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chatting</title>
+        <meta charset="UTF-8" /> 
+        <link type="text/css" 
+		      rel="stylesheet" 
+		      href="/css/hello-spring.css" />
+        <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript">
+            function receiveChat(receiveData) {
+                console.log(receiveData);
+            }
+            $().ready(function() {
+                $(".message").on("keyup", function(event) {
+                    if (event.keyCode === 13) {
+                        opener.sendChat( $(this).val() );
+                        $(this).val("");
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="chat">
+            <ul class="history"></ul>
+            <div class="chat-message-input">
+                <input type="text" class="message" />
+            </div>
+        </div>
+    </body>
+</html>

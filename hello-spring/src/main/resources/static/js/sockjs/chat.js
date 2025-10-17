@@ -1,6 +1,17 @@
+var socket = null;
+function sendChat(message, target) {
+    socket.send(JSON.stringify({
+                    "message": message,
+                    "target": target,
+                    "action": "ONE-TO-ONE-CHAT"
+                }));
+    alert("메시지를 전달했습니다!");
+}
+
 $().ready(function() {
+    var chatPopup = null;
     
-    var socket = new SockJS("/chat");
+    socket = new SockJS("/chat");
     
     socket.onopen = function() {
         // 소켓 엔드포인트에 정상적인 접근이 완료됨!
@@ -23,13 +34,14 @@ $().ready(function() {
         var chatData = JSON.parse(pushedData);
         
         if (chatData.action === "INVITE") {
-            if ( confirm(chatData.message) ) {
+            if ( confirm( chatData.username + chatData.message ) ) {
                 //alert("OK");
                 socket.send(JSON.stringify({
                                 "message": "",
                                 "target": chatData.userEmail,
                                 "action": "INVITE_OK"
                             }));
+                chatPopup = window.open("/html/chat.html");
             }
             else {
                 //alert("NO");
@@ -42,6 +54,15 @@ $().ready(function() {
         }
         else if (chatData.action === "INVITE_FAIL") {
             alert(chatData.message);
+        }
+        else if (chatData.action === "INVITE_OK") {
+            chatPopup = window.open("/html/chat.html");
+        }
+        else if (chatData.action === "INVITE_DENY") {
+            alert(chatData.username + " 님이 대화를 거절했습니다.");
+        }
+        else if (chatData.action === "ONE-TO-ONE-CHAT") {
+            chatPopup.receiveChat(chatData);
         }
         else {
             

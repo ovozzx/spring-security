@@ -68,6 +68,30 @@ public class ChatHandler extends TextWebSocketHandler {
 				return;
 			}
 		}
+		else if (this.matchAction(chatMessage, "INVITE_OK")) {
+			MemberVO member = this.identify.get(session);
+			chatMessage.setUserEmail(member.getEmail());
+			chatMessage.setUsername(member.getName());
+			
+			WebSocketSession targetSession = this.findSession(chatMessage.getTarget());
+			
+			if (targetSession != null && targetSession.isOpen()) {
+				this.sendMessage(targetSession, chatMessage);
+				return;
+			}
+		}
+		else if (this.matchAction(chatMessage, "INVITE_DENY")) {
+			MemberVO member = this.identify.get(session);
+			chatMessage.setUserEmail(member.getEmail());
+			chatMessage.setUsername(member.getName());
+			
+			WebSocketSession targetSession = this.findSession(chatMessage.getTarget());
+			
+			if (targetSession != null && targetSession.isOpen()) {
+				this.sendMessage(targetSession, chatMessage);
+				return;
+			}
+		}
 		
 		
 		logger.info("받은 대화: {}", payload);

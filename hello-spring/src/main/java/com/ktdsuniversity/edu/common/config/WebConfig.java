@@ -68,6 +68,9 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
 		registry.addResourceHandler("/css/**")
 				.addResourceLocations("classpath:/static/css/");
 		
+		registry.addResourceHandler("/html/**")
+				.addResourceLocations("classpath:/static/html/");
+		
 	}
 	
 	
