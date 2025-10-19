@@ -2,25 +2,28 @@ var socket = null;
 function sendChat(message, target) {
     socket.send(JSON.stringify({
                     "message": message,
-                    "target": target,
+                    // [2025-10-20] Chatting Room 보관
+                    "room": target,
                     "action": "ONE-TO-ONE-CHAT"
                 }));
-    alert("메시지를 전달했습니다!");
+    // [2025-10-20] Chatting Room 보관
+    // alert("메시지를 전달했습니다!");
 }
 
 $().ready(function() {
-    var chatPopup = null;
+    // [2025-10-20] Chatting Room 보관
+    // var chatPopup = null;
+    var chatRooms = {};
     
     socket = new SockJS("/chat");
     
     socket.onopen = function() {
         // 소켓 엔드포인트에 정상적인 접근이 완료됨!
-        var username = $(".chat").children(".chat-message-input")
-                                 .children(".user-name")
-                                 .val();
-        var userEmail = $(".chat").children(".chat-message-input")
-                                  .children(".user-email")
-                                  .val();
+        // [2025-10-20] Chatting Room 보관
+        var username = $("#login-user-name").text();
+        // [2025-10-20] Chatting Room 보관
+        var userEmail = $("#login-user-email").text();
+        
         socket.send(JSON.stringify({
                         "message": username + "님이 입장했습니다.", 
                         "username": username,
@@ -41,7 +44,9 @@ $().ready(function() {
                                 "target": chatData.userEmail,
                                 "action": "INVITE_OK"
                             }));
-                chatPopup = window.open("/html/chat.html");
+                
+                // [2025-10-20] Chatting Room 보관
+                // chatPopup = window.open("/html/chat.html");
             }
             else {
                 //alert("NO");
@@ -56,22 +61,23 @@ $().ready(function() {
             alert(chatData.message);
         }
         else if (chatData.action === "INVITE_OK") {
-            chatPopup = window.open("/html/chat.html");
+            // [2025-10-20] Chatting Room 보관
+            var chatPopup = window.open("/html/chat.html?room=" + chatData.room);
+            chatRooms[chatData.room] = chatPopup;
         }
         else if (chatData.action === "INVITE_DENY") {
             alert(chatData.username + " 님이 대화를 거절했습니다.");
         }
         else if (chatData.action === "ONE-TO-ONE-CHAT") {
-            chatPopup.receiveChat(chatData);
+            // [2025-10-20] Chatting Room 보관
+            chatRooms[chatData.room].receiveChat(chatData);
         }
         else {
             
         }
         
-        
-        
-        
-        
+        /*
+        // [2025-10-20] Chatting Room 보관
         var history = $("<li></li>");
         var loginUserEmail = $(".chat").children(".chat-message-input")
                                        .children(".user-email")
@@ -93,7 +99,7 @@ $().ready(function() {
         history.append(message);
         
         $(".chat").children(".history").append(history);
-        
+        */
     }
     
     $(".chat").children(".chat-message-input")

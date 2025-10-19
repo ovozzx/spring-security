@@ -8,6 +8,9 @@ public class ChatMessage {
 	private String action;
 	private String target;
 
+	// [2025-10-20] Chatting Room 보관
+	private String room;
+
 	public ChatMessage() {
 	}
 
@@ -55,6 +58,14 @@ public class ChatMessage {
 
 	public void setTarget(String target) {
 		this.target = target;
+	}
+
+	public String getRoom() {
+		return this.room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 }

@@ -27,10 +27,16 @@ public class ChatHandler extends TextWebSocketHandler {
 	private List<WebSocketSession> sessions;
 	private Map<WebSocketSession, MemberVO> identify;
 	
+	// [2025-10-20] Chatting Room 보관
+	private Map<String, List<WebSocketSession>> rooms;
+	
 	public ChatHandler() {
 		this.gson = new Gson();
 		this.sessions = new ArrayList<>();
 		this.identify = new HashMap<>();
+		
+		// [2025-10-20] Chatting Room 보관
+		this.rooms = new HashMap<>();
 	}
 	
 	@Override
@@ -63,7 +69,7 @@ public class ChatHandler extends TextWebSocketHandler {
 				this.sendMessage(session, chatMessage);
 				return;
 			}
-			else if (targetSession != null && targetSession.isOpen()) {
+			else if (targetSession != null) {
 				this.sendMessage(targetSession, chatMessage);
 				return;
 			}
@@ -75,7 +81,17 @@ public class ChatHandler extends TextWebSocketHandler {
 			
 			WebSocketSession targetSession = this.findSession(chatMessage.getTarget());
 			
-			if (targetSession != null && targetSession.isOpen()) {
+			// [2025-10-20] Chatting Room 보관 시작
+			MemberVO me = this.identify.get(session);
+			String roomName = "ROOM_" + me.getEmail() + "_" + chatMessage.getTarget();
+			this.rooms.put(roomName, List.of(session, targetSession));
+			chatMessage.setRoom(roomName);
+			// [2025-10-20] Chatting Room 보관 끝
+			
+			if (targetSession != null) {
+				// [2025-10-20] Chatting Room 보관
+				this.sendMessage(session, chatMessage);
+				
 				this.sendMessage(targetSession, chatMessage);
 				return;
 			}
@@ -87,19 +103,37 @@ public class ChatHandler extends TextWebSocketHandler {
 			
 			WebSocketSession targetSession = this.findSession(chatMessage.getTarget());
 			
-			if (targetSession != null && targetSession.isOpen()) {
+			if (targetSession != null) {
 				this.sendMessage(targetSession, chatMessage);
 				return;
+			}
+		}
+		// [2025-10-20] Chatting Room 보관
+		else if (this.matchAction(chatMessage, "ONE-TO-ONE-CHAT")) {
+			MemberVO member = this.identify.get(session);
+			chatMessage.setUserEmail(member.getEmail());
+			chatMessage.setUsername(member.getName());
+
+			List<WebSocketSession> roomUsers = this.rooms.get(chatMessage.getRoom());
+			
+			if (roomUsers != null) {
+				for (WebSocketSession user : roomUsers) {
+					this.sendMessage(user, chatMessage);
+				}
+				return;
+			}
+		}
+		// [2025-10-20] Chatting Room 보관
+		else {
+			TextMessage msg = new TextMessage(payload);
+			
+			for (WebSocketSession eachUser: this.sessions) {
+				this.sendMessage(eachUser, msg);
 			}
 		}
 		
 		
 		logger.info("받은 대화: {}", payload);
-		TextMessage msg = new TextMessage(payload);
-		
-		for (WebSocketSession eachUser: this.sessions) {
-			this.sendMessage(eachUser, msg);
-		}
 	}
 	
 	private boolean matchAction(ChatMessage chatMessage, String action) {

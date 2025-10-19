@@ -10,11 +10,39 @@
         <script type="text/javascript">
             function receiveChat(receiveData) {
                 console.log(receiveData);
+                // [2025-10-20] Chatting Room 보관
+                if (roomName === receiveData.room) {
+                    var history = $("<li></li>");
+                    var loginUserEmail = $(opener.document).find("#login-user-email")
+                                                   .text();
+                    
+                    if (loginUserEmail === receiveData.userEmail) {
+                        history.addClass("my-chat");
+                    }
+                    
+                    var username = $("<div></div>");
+                    username.text(receiveData.username);
+                    
+                    var message = $("<div></div>");
+                    message.text(receiveData.message);
+                    
+                    history.append(username);
+                    history.append(message);
+                    
+                    $(".chat").children(".history").append(history);
+                }
             }
+            
+            var roomName = null;
             $().ready(function() {
+
+            	// [2025-10-20] Chatting Room 보관
+            	roomName = window.location.search.split("=")[1];
+            	
                 $(".message").on("keyup", function(event) {
                     if (event.keyCode === 13) {
-                        opener.sendChat( $(this).val() );
+                        // [2025-10-20] Chatting Room 보관
+                        opener.sendChat( $(this).val(), roomName);
                         $(this).val("");
                     }
                 });
