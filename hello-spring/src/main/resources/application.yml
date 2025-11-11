@@ -1,6 +1,6 @@
-#logging:
-#  level:
-#    root: debug
+logging:
+  level:
+    root: info
 
 # mybatis와 spring 연동을 위한 설정.
 mybatis:
@@ -25,7 +25,8 @@ spring:
     password: 1234
   application:
     name: hello-spring
-
+server:
+    port: 8081
     
     
     
