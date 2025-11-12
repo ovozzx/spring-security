@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.vo;
 
+import java.util.List;
+
 /**
  * @TableName MEMBER
  * @TableComment null
@@ -75,6 +77,8 @@ public class MemberVO {
      * @ColumnComment null
      */
     private String delYn;
+    
+    private List<String> roles;
 
     public String getEmail() {
         return this.email;
@@ -156,8 +160,21 @@ public class MemberVO {
         this.delYn = delYn;
     }
     
-    @Override
-    public String toString() {
-        return "MemberVO(email: " + email + ", name: " + name + ", password: " + password + ", salt: " + salt + ", loginFailCnt: " + loginFailCnt + ", blockYn: " + blockYn + ", latestLoginBlockDate: " + latestLoginBlockDate + ", latestLoginFailDate: " + latestLoginFailDate + ", latestLoginSuccessDate: " + latestLoginSuccessDate + ", delYn: " + delYn + ", )";
-    }
+    public List<String> getRoles() {
+		return this.roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberVO [email=" + email + ", name=" + name + ", password=" + password + ", salt=" + salt
+				+ ", loginFailCnt=" + loginFailCnt + ", blockYn=" + blockYn + ", latestLoginBlockDate="
+				+ latestLoginBlockDate + ", latestLoginFailDate=" + latestLoginFailDate + ", latestLoginSuccessDate="
+				+ latestLoginSuccessDate + ", delYn=" + delYn + ", roles=" + roles + "]";
+	}
+
+	
 }

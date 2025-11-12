@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -53,10 +54,11 @@
                 
                 <div class="btn-group">
                     <div class="right-align">
-                        <c:if test="${sessionScope.__LOGIN_USER__.email eq board.email}">
+                        <sec:authentication property="principal.email" var="authEmail"/> <!-- property 값을 var 변수에 넣어라 -->
+                        <c:if test="${authEmail eq board.email}">
                          <a href="/modify/${board.id}" class="modify-link">수정</a>
                          <a href="/delete/${board.id}" class="delete-link">삭제</a>
-                     </c:if>
+                        </c:if>
                         <a href="/list" class="list-link">목록으로 가기</a>
                     </div>
                 </div>
@@ -77,10 +79,10 @@
                                 다운로드: #replyAttachedFileDownloadCount#
                             </div>
                             <div class="reply-control horizontal-flex flex-end flex-gap-10">
+	                             <div class="reply-reply">댓글달기</div>	
                                  <div class="reply-delete">삭제하기</div>
                                  <div class="reply-modify">수정하기</div>
-                                 <div class="reply-recommend">추천하기</div>
-                                 <div class="reply-reply">댓글달기</div>
+                                 <div class="reply-recommend">추천하기</div>                                                       	
                             </div>
                         </li>
                     </template>

@@ -103,6 +103,15 @@
          WHERE EMAIL = #{_parameter}
            AND DEL_YN = 'N'
     </update>
-    
+    <select id="selectRolesByEmail" 
+    parameterType="string" 
+    resultType="string">
+	    SELECT ROLE_NAME
+	      FROM "ROLE"
+	     START WITH ROLE_ID = (SELECT ROLE_ID
+	                             FROM MEMBER 
+	                            WHERE EMAIL = #{email})
+	   CONNECT BY PRIOR ROLE_ID = TOP_ROLE
+    </select>
     
 </mapper>

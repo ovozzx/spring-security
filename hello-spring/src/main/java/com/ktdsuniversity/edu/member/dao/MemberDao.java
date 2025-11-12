@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.dao;
 
+import java.util.List;
+
 import com.ktdsuniversity.edu.member.vo.MemberVO;
 import com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO;
 
@@ -20,5 +22,7 @@ public interface MemberDao {
 	int selectUnblockMemberByEmail(String email);
 
 	int updateDelYnByEmail(String email);
+
+	List<String> selectRolesByEmail(String username);
 
 }

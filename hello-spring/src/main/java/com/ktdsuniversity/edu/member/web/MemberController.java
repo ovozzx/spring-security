@@ -1,6 +1,10 @@
 package com.ktdsuniversity.edu.member.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,15 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.ktdsuniversity.edu.common.util.AuthenticationUtil;
 import com.ktdsuniversity.edu.common.vo.AjaxResponse;
 import com.ktdsuniversity.edu.member.service.MemberService;
-import com.ktdsuniversity.edu.member.vo.MemberVO;
-import com.ktdsuniversity.edu.member.vo.RequestMemberLoginVO;
 import com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Controller
@@ -25,11 +28,13 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
     
-    @GetMapping("/member/regist")
+    @PreAuthorize("!isAuthenticated()") // 인증을 안해야 들어올 수 있다!
+    @GetMapping("/member/regist") // 인증을 한 사람은 들어가면 안됨
     public String viewMemberRegistPage() {
     	return "member/regist";
     }
     
+    @PreAuthorize("!isAuthenticated()") 
     @PostMapping("/member/regist")
     public String doMemberRegistAction(
     		@Valid RequestRegistMemberVO requestRegistMemberVO,
@@ -54,6 +59,7 @@ public class MemberController {
     	return "redirect:/member/login";
     }
     
+    @PreAuthorize("!isAuthenticated()") 
     @ResponseBody
     @GetMapping("/member/regist/check")
     public AjaxResponse doDuplicateEmailCheckAction(@RequestParam String email) {
@@ -64,55 +70,47 @@ public class MemberController {
     	return ajaxResponse;
     }
     
+    @PreAuthorize("!isAuthenticated()") 
     @GetMapping("/member/login")
     public String viewLoginPage() {
-    	return "member/login";
+    	return "member/login"; // 인증이나 권한 없을 때 여기로 안내하는데 어케되는지
     }
     
-    @PostMapping("/member/login")
-    public String doMemberLoginAction(
-    		@Valid RequestMemberLoginVO requestMemberLoginVO,
-    		BindingResult bindingResult,
-    		Model model,
-    		@RequestParam String nextUrl,
-    		HttpSession httpSession) {
-    	
-    	if (bindingResult.hasErrors()) {
-    		model.addAttribute("inputData", requestMemberLoginVO);
-    		return "member/login";
-    	}
-    	
-    	MemberVO memberVO = this.memberService.readMember(requestMemberLoginVO);
-    	httpSession.setAttribute("__LOGIN_USER__", memberVO);
-    	
-    	return "redirect:" + nextUrl;
-    }
-    
+    @PreAuthorize("isAuthenticated()") // 인증을 했을 때만 들어올 수 있음 
     @GetMapping("/member/logout")
-    public String doLogoutAction(HttpSession httpSession) {
-    	httpSession.invalidate();
+    public String doLogoutAction(HttpServletRequest request, 
+    		                     HttpServletResponse response,
+    		                     Authentication authentication) {
+    	
+    	LogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+    	logoutHandler.logout(request, response, authentication);
+    	
     	return "redirect:/list";
     }
     
+    @PreAuthorize("isAuthenticated()") // 인증을 했을 때만 들어올 수 있음 
     @GetMapping("/member/delete-me")
-    public String doDeleteMeAction(
-    		HttpSession httpSession, 
-    		@SessionAttribute("__LOGIN_USER__") MemberVO memberVO) {
+    public String doDeleteMeAction(HttpServletRequest request, 
+						           HttpServletResponse response,
+						    	   Authentication authentication) {
     	// 1. 현재 로그인한 사용자의 이메일을 가져온다.
     	// Case 1.
 //    	MemberVO memberVO = (MemberVO) httpSession.getAttribute("__LOGIN_USER__");
 //    	String email = memberVO.getEmail();
-    	String email = memberVO.getEmail();
+    	String email = AuthenticationUtil.getEmail();
     	// 2. 현재 로그인한 사용자의 이메일로 MEMBER 테이블의 DEL_YN을 "Y"로 변경한다.
     	boolean updateResult = this.memberService.updateDelYnByEmail(email);
     	
     	// 3. 현재 로그인한 사용자를 로그아웃 시킨다.
-    	httpSession.invalidate();
+    	// Authentication Logout 
+    	LogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+    	logoutHandler.logout(request, response, authentication);
     	
     	// 4. /member/delete-success 로 이동한다.
     	return "redirect:/member/delete-success";
     }
     
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/member/delete-success")
     public String viewDeleteSuccessPage() {
     	return "member/deletesuccess";

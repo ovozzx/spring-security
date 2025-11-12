@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.dao.impl;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,12 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao {
 	public int updateDelYnByEmail(String email) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateDelYnByEmail", email);
 	}
+
+	@Override
+	public List<String> selectRolesByEmail(String username) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectRolesByEmail", username);
+	}
+
 
 
 }

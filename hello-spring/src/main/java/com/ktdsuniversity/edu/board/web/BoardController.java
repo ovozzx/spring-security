@@ -19,13 +19,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.board.service.BoardService;
 import com.ktdsuniversity.edu.board.vo.BoardExcelVO;
@@ -35,9 +36,9 @@ import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
+import com.ktdsuniversity.edu.common.util.AuthenticationUtil;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.file.util.ResourceUtil;
-import com.ktdsuniversity.edu.member.vo.MemberVO;
 
 import io.github.seccoding.excel.write.Write;
 import jakarta.validation.Valid;
@@ -66,14 +67,18 @@ public class BoardController {
 		return "board/list";
 	}
 
+	@PreAuthorize("isAuthenticated()") // 인증 검사인데, 이 메소드가 동작되기 이전에 검사 => 이것을 동작하기 위해 만족하는 권한을 가지고 있는 지를 검사한다
+	// 인증만 되어있으면 누구나 동작 가능하니까, 인증만 검사하고 권한 검사는 안 함
+	//@PostAuthorize // 인증 검사, 이 메소드가 동작된 이후에 검사 => 반환시킨 데이터가 내가 접근 가능한 지를 검사한다
 	@GetMapping("/write")
 	public String viewBoardWritePage() {
 		return "board/write";
 	}
 
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/write")
 	public String doWriteBoardAction(@Valid RequestCreateBoardVO requestCreateBoardVO, BindingResult bindingResult,
-			@SessionAttribute(value = "__LOGIN_USER__", required = false) MemberVO loginUser, Model model) {
+			Authentication authentication, Model model) {
 
 		logger.debug(requestCreateBoardVO.toString());
 		
@@ -83,7 +88,7 @@ public class BoardController {
 			return "board/write";
 		}
 
-		requestCreateBoardVO.setEmail(loginUser.getEmail());
+		requestCreateBoardVO.setEmail(AuthenticationUtil.getEmail());
 
 		// 게시글 등록 트랜잭션 요청.
 		boolean createResult = this.boardService.createNewBoard(requestCreateBoardVO);
@@ -128,6 +133,7 @@ public class BoardController {
 //		return "";
 //	}
 
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/view/{id}")
 	public String viewBoardDetailPage(@PathVariable String id, Model model) {
 
@@ -146,17 +152,21 @@ public class BoardController {
 	 * 
 	 * 게시글의 정보를 읽는다 ==> boardService.readBoardOneById(id); 사용.
 	 */
-	@GetMapping("/modify/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardAuthHelper.isResourceOwner(#id)") 
+	// 관리자인지 확인, 권한 확인하면 인증도 이미 확인된 거 or 내가 쓴 글인지
+    // @ 붙이면 Bean에 있는 거 부를 수 있음 -> 앞글자만 소문자로 바뀌어서 들어감. 
+	// #id하면 id 받아서 넣을 수 있음
+	@GetMapping("/modify/{id}") // 관리자 or 작성한 사람 가능
 	public String viewBoardModifyPage(
 			@PathVariable String id, Model model,
-			@SessionAttribute("__LOGIN_USER__") MemberVO loginUser
+			Authentication authentication
 		) {
 		
 		BoardVO board = this.boardService.readBoardOneById(id, false);
 		
-		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
-		}
+//		if ( ! board.getEmail().equals( AuthenticationUtil.getEmail() )) { 이제 security에서 미리 해주기때문에 필요 없음
+//			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
+//		}
 		
 		model.addAttribute("board", board);
 		return "board/modify";
@@ -170,6 +180,7 @@ public class BoardController {
 	 * updateBoardModifyById(RequestModifyBoardVO) dao -
 	 * updateBoardModifyById(RequestModifyBoardVO)
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardAuthHelper.isResourceOwner(#id)") 
 	@PostMapping("/modify/{id}")
 	public String doBoardModifyAction(@PathVariable String id, 
 			@Valid RequestModifyBoardVO requestModifyBoardVO,
@@ -188,6 +199,7 @@ public class BoardController {
 		return "redirect:/list";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardAuthHelper.isResourceOwner(#id)") 
 	@GetMapping("/delete/{id}")
 	public String doDeleteBoardAction(@PathVariable String id) {
 		boolean deleteResult = this.boardService.deleteBoardById(id);
@@ -195,7 +207,8 @@ public class BoardController {
 		return "redirect:/list";
 	}
 	
-	@GetMapping("/download-article")
+	@PreAuthorize("hasRole('ROLE_ADMIN')") 
+	@GetMapping("/download-article") // 보통 관리자 기능
 	public ResponseEntity<Resource> downloadArticle() {
 		
 		// 데이터베이스에 등록된 모든 게시글을 조회.
@@ -291,6 +304,7 @@ public class BoardController {
 		return ResourceUtil.getResource(excelFile, filename, "application/octet-stream");
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')") 
 	@GetMapping("/download-article-2")
 	public ResponseEntity<Resource> downloadArticle2() {
 		List<BoardVO> boardList = this.boardService.readAllBoardListForExcel();

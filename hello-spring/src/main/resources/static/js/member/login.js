@@ -14,7 +14,8 @@ $().ready(function() {
         }
         
         $("#requestMemberLoginVO")
-            .attr("action", "/member/login?nextUrl=" + currentUrl)
+            .attr("action", "/member/authenticate?nextUrl=" + currentUrl)
+			//"/member/login?nextUrl=" + currentUrl)
             .submit();
         
     });

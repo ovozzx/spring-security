@@ -10,7 +10,7 @@ public interface MemberService {
 
 	int readMemberCountByEmail(String email);
 
-	MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO);
+	//MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO);
 
 	boolean updateDelYnByEmail(String email);
 

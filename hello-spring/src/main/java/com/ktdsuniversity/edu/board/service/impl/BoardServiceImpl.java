@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,8 @@ import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
-import com.ktdsuniversity.edu.common.util.SessionUtil;
+import com.ktdsuniversity.edu.common.util.AuthenticationUtil;
+
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
@@ -136,10 +138,10 @@ public class BoardServiceImpl implements BoardService {
 		BoardVO board = this.boardDao.selectBoardById(requestModifyBoardVO.getId());
 		
 		// Spring --> Controller가 아닌 영역에서 Session을 가져오기 위한 방법 제공.
-		MemberVO loginUser = SessionUtil.getLoginObject();
-		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
-		}
+//		String email = AuthenticationUtil.getEmail();
+//		if ( ! board.getEmail().equals( email )) { // 이미 한 작업 
+//			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
+//		}
 		
 		int updateCount = this.boardDao.updateBoardModifyById(requestModifyBoardVO);
 		
@@ -154,11 +156,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean deleteBoardById(String id) {
 		
-		BoardVO board = this.boardDao.selectBoardById(id);
-		MemberVO loginUser = SessionUtil.getLoginObject();
-		if ( ! board.getEmail().equals( loginUser.getEmail() )) {
-			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
-		}
+//		BoardVO board = this.boardDao.selectBoardById(id);
+//		String email = AuthenticationUtil.getEmail();
+//		if ( ! board.getEmail().equals( email )) {
+//			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
+//		}
 		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		if (deleteCount == 0) {

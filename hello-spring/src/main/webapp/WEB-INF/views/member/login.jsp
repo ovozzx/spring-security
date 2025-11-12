@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,9 +17,9 @@
 	       <jsp:include page="./memberloginlogout.jsp" />
 	       <h1 class="page-title">로그인</h1>
 	       
-           <form:form modelAttribute="requestMemberLoginVO"
+           <form id="requestMemberLoginVO"
                       method="post"
-                      action="/member/login">
+                      action="/member/authenticate"><!-- /member/login => security 인증이 아님 세션 인증 -->
                       
                <c:if test="${not empty errorMessage}">
                    <span class="validate-error">${errorMessage}</span>
@@ -29,14 +28,14 @@
 		       <div class="grid member-login">
 		           <label for="email" class="require">이메일</label>
 		           <div>
-		              <input type="text" id="email" name="email" value="${inputData.email}" />
-		              <form:errors path="email" cssClass="validate-error validate-require" />
+		              <input type="text" id="email" name="email" value="${email}" />
+		              <div class="validate-error validate-require"></div>
 		           </div>
 		           
                    <label for="password" class="require">비밀번호</label>
 		           <div>
                       <input type="password" id="password" name="password" />
-                      <form:errors path="password" cssClass="validate-error validate-require" />
+                      <div class="validate-error validate-require"></div>
                    </div>
 		           
 		           <div class="btn-group">
@@ -50,7 +49,7 @@
 		           </div>
 		           
 		       </div>
-           </form:form>
+           </form>
 	   </div>
 	
     </body>

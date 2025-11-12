@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +57,13 @@ public class GlobalExceptionHandler {
 		}
 		
 		return hse.getViewName();
+	}
+	
+	@ExceptionHandler(AuthorizationDeniedException.class)
+	public String viewAuthorizationDeniedPage(AuthorizationDeniedException ade) {
+		return "forward:/member/login"; // redirect로 하면 이전 페이지로 못 돌아감
+		// forward는 url은 그대로이지만 페이지가 바뀜
+		// redirect는 url도 바뀜
 	}
 	
 	@ExceptionHandler(RuntimeException.class)

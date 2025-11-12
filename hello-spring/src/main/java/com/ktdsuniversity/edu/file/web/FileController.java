@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +28,9 @@ public class FileController {
     		@PathVariable String id,
     		@PathVariable String fileGroupId,
     		@PathVariable String fileId,
-    		@SessionAttribute(value="__LOGIN_USER__", required=false) MemberVO loginUser) {
+    		Authentication authentication) {
     	
-    	if (loginUser == null) {
+    	if (authentication == null) {
     		return null;
     	}
     	

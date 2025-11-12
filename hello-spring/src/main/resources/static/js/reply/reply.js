@@ -28,7 +28,6 @@ $().ready(function() {
                 replyDom.find(".attached-file").remove();
             }
             
-            // 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
             replyDom.find(".reply-recommend").on("click", function() {
                 var replyItem = $(this).closest("li");
                 var replyId = replyItem.data("reply-id");
@@ -89,7 +88,9 @@ $().ready(function() {
                 $("#reply-content").focus();
             });
             
+			// 댓글 추천하기 --> 본인이 작성한 댓글을 추천안되게.
             var whoami = $("#login-user-email").text();
+			console.log("whoami : " + whoami);
             // 내가 작성한 댓글이라면 삭제하기, 수정하기, 댓글달기 만 보여준다.
             if (whoami === reply.memberVO.email) {
                 replyDom.find(".reply-recommend").remove();

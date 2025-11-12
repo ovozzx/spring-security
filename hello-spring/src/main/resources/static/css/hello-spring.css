@@ -2,9 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
 body {
-	margin: 0;
-	color: #333;
-	font-family: "Noto Sans KR", sans-serif;
+    margin: 0;
+    color: #333;
+    font-family: "Noto Sans KR", sans-serif;
+    background-image: url('https://i.pinimg.com/736x/75/f9/96/75f996ef90da4b86e024fe2d138b2821.jpg')
 }
 
 pre.content {
@@ -48,7 +49,7 @@ table.grid {
 	width: 100%;
 	border: 1px solid #ccc;
 	border-collapse: collapse;
-	
+	background-color: #fff;
 	& > thead {
 	   background-color: #ddd;
 	   border-bottom: 1px solid #ccc;
@@ -198,7 +199,7 @@ div.board-write {
 div.board-view {
 	grid-template-columns: 80px 1fr;
     grid-template-rows: repeat(2, 28px) auto repeat(3, 28px) auto 1fr auto;
-    
+    background-color: #fff;
     & > .reply-area {
         grid-column: 1 / -1;
         

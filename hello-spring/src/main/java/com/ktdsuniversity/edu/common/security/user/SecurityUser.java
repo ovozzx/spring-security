@@ -36,8 +36,12 @@ public class SecurityUser implements UserDetails{ // 인터페이스 가져오�
 	// DB에서 조회된 정보로 사용자의 권한을 부여
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")
-				     , new SimpleGrantedAuthority("ROLE_USER")); // 이 유저는 관리자이면서 사용자라는 뜻!
+		return this.memberVO.getRoles()
+				            .stream()
+						    .map(SimpleGrantedAuthority::new)
+						    .toList();
+		//return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")
+		//		     , new SimpleGrantedAuthority("ROLE_USER")); // 이 유저는 관리자이면서 사용자라는 뜻!
 	}
 
 	// Spring Security는 인증을 위해 필요하 정보로 Password, ID만 필요로 함
@@ -54,4 +58,11 @@ public class SecurityUser implements UserDetails{ // 인터페이스 가져오�
 		return this.memberVO.getEmail();
 	} 
 
+	// UserDetails > isAccountLock 함수 있음
+	@Override
+	public boolean isAccountNonLocked() { // 잠기지 않았는지 확인
+		return this.memberVO.getBlockYn().equals("N");
+	}
+	
+	
 }

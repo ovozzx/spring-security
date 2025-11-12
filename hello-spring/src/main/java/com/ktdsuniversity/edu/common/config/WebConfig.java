@@ -13,8 +13,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import com.ktdsuniversity.edu.common.interceptors.AccessControlInterceptor;
-import com.ktdsuniversity.edu.common.interceptors.CheckSessionInterceptor;
+//import com.ktdsuniversity.edu.common.interceptors.AccessControlInterceptor;
+//import com.ktdsuniversity.edu.common.interceptors.CheckSessionInterceptor;
 import com.ktdsuniversity.edu.websocket.handler.ChatHandler;
 
 /**
@@ -32,29 +32,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer {
 	// 웹 애플리케이션의 필수 기능.
 	// 사용자가 방문한 엔드포인트를 Database에 저장.
 	//  누가 언제 어디로 어떤 방법을 통해서 접근을 했는가?
-	
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		
-		registry.addInterceptor(new CheckSessionInterceptor())
-				.addPathPatterns(List.of("/**")) // CheckSessionInterceptor가 개입 할 주소
-				.excludePathPatterns(
-						List.of(
-								"/js/**", 
-								"/css/**", 
-								"/member/regist/**", 
-								"/member/login",
-								"/member/delete-success",
-								"/list"
-								)) // CheckSessionInterceptor가 개입하지 말아야 할 주소
-				;
-		
-		registry.addInterceptor(new AccessControlInterceptor())
-				.addPathPatterns(List.of("/member/login", "/member/regist/**"));
-		
-	}
-	
-	
+
 	/**
 	 * Static Resource를 받아오는 설정.
 	 *  /static 폴더에 있는 파일에 접근하기 위한 Endpoint 설정.

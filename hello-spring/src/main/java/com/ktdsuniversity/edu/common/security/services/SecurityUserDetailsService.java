@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.common.security.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +32,17 @@ public class SecurityUserDetailsService implements UserDetailsService{
 		if(memberVO == null) {
 			throw new UsernameNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
 		}
+		
+		if(memberVO.getBlockYn().equals("Y")) {
+			int count = this.memberDao.selectUnblockMemberByEmail(username);
+			if(count > 0) {
+				memberVO.setBlockYn("N");
+			}
+		}
+		
+		// 권한 조회 => 리스트로 받기 (권한이 계층 구조라서 여러개일 수 있기 때문)
+		List<String> roles = this.memberDao.selectRolesByEmail(username);
+		memberVO.setRoles(roles);
 		
 		// 반환 타입 UserDetails라서 이를 implements 한 SecurityUser로 반환하면 됨
 		return new SecurityUser(memberVO);

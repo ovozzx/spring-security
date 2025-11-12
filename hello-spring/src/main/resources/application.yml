@@ -1,6 +1,6 @@
 logging:
   level:
-    root: info
+    root: debug
 
 # mybatis와 spring 연동을 위한 설정.
 mybatis:

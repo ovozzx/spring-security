@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.common.exceptions.AjaxException;
-import com.ktdsuniversity.edu.common.util.SessionUtil;
+import com.ktdsuniversity.edu.common.util.AuthenticationUtil;
+
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
@@ -61,9 +62,9 @@ public class ReplyServiceImpl implements ReplyService {
 					requestCreateOrUpdateReplyVO.getReplyId());
 			
 			// 내가 쓴 것인지 확인 필요.
-			if ( ! replyVO.getEmail().equals(requestCreateOrUpdateReplyVO.getEmail())) {
-				throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
-			}
+//			if ( ! replyVO.getEmail().equals(requestCreateOrUpdateReplyVO.getEmail())) {
+//				throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+//			}
 			
 			String deleteFileId = requestCreateOrUpdateReplyVO.getDeleteFileId();
 			if (uploadFile == null && deleteFileId != null) {
@@ -94,7 +95,8 @@ public class ReplyServiceImpl implements ReplyService {
 	@Transactional
 	@Override
 	public int updateReplyRecommendByReplyId(String replyId) {
-		String loginUser = SessionUtil.getLoginObject().getEmail();
+		
+		String email = AuthenticationUtil.getEmail();
 		
 		// replyId로 댓글 정보 조회.
 		ReplyVO replyVO = this.replyDao.selectReplyByReplyId(replyId);
@@ -104,9 +106,9 @@ public class ReplyServiceImpl implements ReplyService {
 		
 		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
 		// 같다면 예외를 던짐.
-		if (loginUser.equals(replyVO.getEmail())) {
-			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
-		}
+//		if (email.equals(replyVO.getEmail())) {
+//			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+//		}
 		
 		// 다르다면 추천수를 증가
 		int updateCount = this.replyDao.updateReplyRecommendByReplyId(replyId);
@@ -119,7 +121,8 @@ public class ReplyServiceImpl implements ReplyService {
 	@Transactional
 	@Override
 	public boolean deleteReplyByReplyId(String replyId) {
-		String loginUser = SessionUtil.getLoginObject().getEmail();
+		
+		String email = AuthenticationUtil.getEmail();
 		
 		// replyId로 댓글 정보 조회.
 		ReplyVO replyVO = this.replyDao.selectReplyByReplyId(replyId);
@@ -129,9 +132,9 @@ public class ReplyServiceImpl implements ReplyService {
 		
 		// 댓글 작성자와 로그인 작성자가 동일한지 검사.
 		// 다르다면 예외를 던짐.
-		if (!loginUser.equals(replyVO.getEmail())) {
-			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
-		}
+//		if (!email.equals(replyVO.getEmail())) {
+//			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+//		}
 		
 		// 같다면 삭제
 		return this.replyDao.deleteReplyByReplyId(replyId) > 0;
