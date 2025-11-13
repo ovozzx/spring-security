@@ -26,12 +26,15 @@ spring:
   application:
     name: hello-spring
 server:
-    port: 8081
+    port: 8080
     
     
     
 # hello-spring application의 별도 설정(Customize)
 app:
+  jwt:
+    issure: ktds-university
+    secret-key: asdksa11ddasd343da219dsakhd82hdkd82jdal2edsdasd23313132232dsadsadsadsadasdsd22e2asdksa11ddasd343da219dsakhd82hdkd82jdal2edsdasd23313132232dsadsadsadsadasdsd22e2
   multipart:
     whitelist: 
       .txt,

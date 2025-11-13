@@ -6,6 +6,7 @@
     </jsp:include>
 	        <h1 class="page-title">게시글 수정</h1>
 	        <form:form modelAttribute="requestModifyBoardVO" method="post" action="/modify/${board.id}">
+	            <sec:csrfInput />
 	            <div class="grid board-write">
 		            <label for="subject" class="require">제목</label>
 		            <div>

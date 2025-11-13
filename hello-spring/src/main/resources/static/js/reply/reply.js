@@ -4,7 +4,8 @@ $().ready(function() {
     var boardId = $(".reply-area").data("board-id");
     
     // 댓글 조회 -> 계층조회
-    $.get("/reply/" + boardId, function(response) {
+	var csrf = $("meta[name='_csrf']").attr("content");
+    $.get("/reply/" + boardId, {_csrf: csrf}, function(response) {
         
         var replyTemplate = $(".reply-template").html();
         for (var i = 0; i < response.body.length; i++) {
@@ -31,7 +32,8 @@ $().ready(function() {
             replyDom.find(".reply-recommend").on("click", function() {
                 var replyItem = $(this).closest("li");
                 var replyId = replyItem.data("reply-id");
-                $.get("/reply/" + replyId + "/recommend", function(response) {
+				var csrf = $("meta[name='_csrf']").attr("content");
+                $.get("/reply/" + replyId + "/recommend", {_csrf: csrf}, function(response) {
                     if (response.body) {
                         // 추천하기 응답은 추천한 댓글의 최종 추천수.
                         replyItem.find(".recommend-count").text("추천: " + response.body);
@@ -46,7 +48,8 @@ $().ready(function() {
             replyDom.find(".reply-delete").on("click", function() {
                 var replyItem = $(this).closest("li");
                 var replyId = replyItem.data("reply-id");
-                $.get("/reply/" + replyId + "/delete", function(response) {
+				var csrf = $("meta[name='_csrf']").attr("content");
+                $.get("/reply/" + replyId + "/delete", {_csrf: csrf}, function(response) {
                     if (response.body) {
                         replyItem.remove();
                     }
@@ -180,7 +183,10 @@ $().ready(function() {
                         formData.append("replyContent", replyContent);
                         
                         var boardId = replyInput.closest(".reply-area").data("board-id");
-                        
+						
+						var csrf = $("meta[name='_csrf']").attr("content");
+						formData.append("_csrf", csrf);
+						
                         $.ajax({
                             url: "/reply/" + boardId,
                             method: "post",

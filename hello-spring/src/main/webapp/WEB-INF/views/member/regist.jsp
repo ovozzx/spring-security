@@ -2,9 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
+	    <sec:csrfMetaTags />
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
 		<link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
@@ -20,7 +22,7 @@
 	       <form:form modelAttribute="requestRegistMemberVO"
 	                  method="post"
 	                  action="/member/regist">
-	           
+	           <sec:csrfInput />
 	           <c:if test="${not empty errorMessage}">
 	               <span class="validate-error">${errorMessage}</span>
 	           </c:if>

@@ -7,9 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ktdsuniversity.edu.common.exceptions.AjaxException;
@@ -23,6 +26,7 @@ import jakarta.validation.Valid;
 
 @PreAuthorize("isAuthenticated()") // 동일한 규칙이면 이렇게 가능. 하나하나 달 필요 없음
 @RestController
+@RequestMapping("/api/v1")
 public class ReplyController {
 
     @Autowired
@@ -61,7 +65,7 @@ public class ReplyController {
     }
     
     @PreAuthorize("hasRole('ROLE_ADMIN') or !@replyAuthHelper.isResourceOwner(#replyId)") 
-    @GetMapping("/reply/{replyId}/recommend") // 내가 쓴 거는 추천 못함
+    @PutMapping("/reply/{replyId}/recommend") // 내가 쓴 거는 추천 못함
     public AjaxResponse doRecommendReplyAction(@PathVariable String replyId, Authentication authentication) {
     	
     	int latestRecommendCount = 
@@ -73,7 +77,7 @@ public class ReplyController {
     }
     
     @PreAuthorize("hasRole('ROLE_ADMIN') or @replyAuthHelper.isResourceOwner(#replyId)") 
-    @GetMapping("/reply/{replyId}/delete") // 관리자 or 내가 쓴 글
+    @DeleteMapping("/reply/{replyId}") // 관리자 or 내가 쓴 글
     public AjaxResponse doRemoveReplyAction(@PathVariable String replyId) {
     	
     	boolean deleteResult = 
@@ -83,6 +87,7 @@ public class ReplyController {
     	recommendResponse.setBody(deleteResult);
     	return recommendResponse;
     }
+    
 }
 
 

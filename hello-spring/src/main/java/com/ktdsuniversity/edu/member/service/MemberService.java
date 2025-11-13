@@ -14,6 +14,8 @@ public interface MemberService {
 
 	boolean updateDelYnByEmail(String email);
 
+	MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO);
+
 }
 
 

@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,6 +111,31 @@ public class MemberServiceImpl implements MemberService {
 	public boolean updateDelYnByEmail(String email) {
 		return this.memberDao.updateDelYnByEmail(email) > 0;
 	}
+
+	@Override
+	public MemberVO readMember(RequestMemberLoginVO requestMemberLoginVO) {
+		
+		MemberVO memberVO = this.memberDao.selectMemberByEmail(requestMemberLoginVO.getEmail());
+		
+		if(memberVO != null) {
+			String password = requestMemberLoginVO.getPassword();
+			String salt = memberVO.getSalt();
+			
+			password = SHAEncrypter.getEncrypt(password, salt);
+			
+			if(memberVO.getPassword().equals(password)) {
+				
+				List<String> roles = this.memberDao.selectRolesByEmail(requestMemberLoginVO.getEmail());
+				memberVO.setRoles(roles);
+				
+				return memberVO;
+			}
+			
+		}
+		
+		return null;
+	}
+
 
 }
 

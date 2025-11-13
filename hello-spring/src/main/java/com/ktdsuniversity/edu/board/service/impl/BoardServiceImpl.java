@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +15,11 @@ import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
-import com.ktdsuniversity.edu.common.util.AuthenticationUtil;
-
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.file.vo.FileVO;
-import com.ktdsuniversity.edu.member.vo.MemberVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {

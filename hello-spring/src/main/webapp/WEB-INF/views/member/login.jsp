@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,9 +19,8 @@
 	       <h1 class="page-title">로그인</h1>
 	       
            <form id="requestMemberLoginVO"
-                      method="post"
-                      action="/member/authenticate"><!-- /member/login => security 인증이 아님 세션 인증 -->
-                      
+                      method="post"><!-- /member/login => security 인증이 아님 세션 인증 -->
+               <sec:csrfInput />
                <c:if test="${not empty errorMessage}">
                    <span class="validate-error">${errorMessage}</span>
                </c:if>

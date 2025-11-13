@@ -19,6 +19,7 @@
 	                   method="post" 
 	                   action="/write" 
 	                   enctype="multipart/form-data">
+	            <sec:csrfInput />
 	            <div class="grid board-write">
 		            <label for="subject" class="require">제목</label>
 		            <div>

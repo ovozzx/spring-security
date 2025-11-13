@@ -1,8 +1,6 @@
 package com.ktdsuniversity.edu.common.security.user;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

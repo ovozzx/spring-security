@@ -59,11 +59,19 @@ public class GlobalExceptionHandler {
 		return hse.getViewName();
 	}
 	
+//	@ExceptionHandler(AuthorizationDeniedException.class)
+//	public String viewAuthorizationDeniedPage(AuthorizationDeniedException ade) {
+//		return "forward:/member/login"; // redirect로 하면 이전 페이지로 못 돌아감
+//		// forward는 url은 그대로이지만 페이지가 바뀜
+//		// redirect는 url도 바뀜
+//	}
+	@ResponseBody
 	@ExceptionHandler(AuthorizationDeniedException.class)
-	public String viewAuthorizationDeniedPage(AuthorizationDeniedException ade) {
-		return "forward:/member/login"; // redirect로 하면 이전 페이지로 못 돌아감
-		// forward는 url은 그대로이지만 페이지가 바뀜
-		// redirect는 url도 바뀜
+	public AjaxResponse sendAuthenticatedMessage(AuthorizationDeniedException ade) {
+		logger.error(ade.getMessage(), ade);
+		AjaxResponse errorResponse = new AjaxResponse();
+		errorResponse.setError(Map.of("message", "권한이 충분하지 않습니다."));
+		return errorResponse;
 	}
 	
 	@ExceptionHandler(RuntimeException.class)

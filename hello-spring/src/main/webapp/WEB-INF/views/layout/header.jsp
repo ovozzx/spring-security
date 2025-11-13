@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<sec:csrfMetaTags /> <!-- ajax 용 -->
 		<meta charset="UTF-8">
 		<title>${param.title}</title>
 		<link type="text/css" 

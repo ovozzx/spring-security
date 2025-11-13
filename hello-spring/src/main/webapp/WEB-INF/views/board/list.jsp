@@ -63,6 +63,7 @@
 	    </table>
 	    
 	    <form class="board-search-form">
+	       <sec:csrfInput />
 	       <input type="date" name="from" class="from" value="${search.from}" /> ~ 
 	       <input type="date" name="to" class="to" value="${search.to}" />
 	       <select name="searchType">

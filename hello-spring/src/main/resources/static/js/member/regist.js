@@ -21,7 +21,11 @@ $().ready(function() {
         
         var that = this;
         
-        $.get("/member/regist/check?email=" + value, function(response) {
+		// CSRF 조회.
+		var csrf = $("meta[name='_csrf']").attr("content");
+		
+		// {} 객체 리터럴이 파라미터로 전달됨 => 회원가입할때 마다 csrf를 보내겠다!
+        $.get("/member/regist/check?email=" + value, {_csrf: csrf}, function(response) {
             var emailCount = response.body;
             if (emailCount === 0) {
                 $(that).closest("div").find("span.not-ok").remove();

@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.member.vo;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @TableName MEMBER
  * @TableComment null
@@ -27,6 +29,7 @@ public class MemberVO {
      * @ColumnType VARCHAR2(100)
      * @ColumnComment null
      */
+    @JsonIgnore
     private String password;
 
     /**
@@ -34,6 +37,7 @@ public class MemberVO {
      * @ColumnType VARCHAR2(100)
      * @ColumnComment null
      */
+    @JsonIgnore
     private String salt;
 
     /**
