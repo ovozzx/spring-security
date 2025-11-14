@@ -64,7 +64,7 @@ private static final Logger logger = LoggerFactory.getLogger(BoardApi.class);
 
 	// http://localhost:8080/list?pageNo=0&listSize=20
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/") // 패치하면 v 버전을 바꿈 => /api/v1/boards
+	@GetMapping("") // 패치하면 v 버전을 바꿈 => @GetMapping("/")이면, /api/v1/boards/가 됨 끝에 / 붙음
 	public AjaxResponse getBoardListPage(
 			RequestSearchBoardVO requestSearchBoardVO) { // @RequestBody는 POST & PUT에만 가능
 		
@@ -84,10 +84,10 @@ private static final Logger logger = LoggerFactory.getLogger(BoardApi.class);
 	}
 
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/") // => /api/v1/boards
+	@PostMapping("") // => /api/v1/boards
 	public AjaxResponse createBoard(@Valid RequestCreateBoardVO requestCreateBoardVO, BindingResult bindingResult,
 			Authentication authentication) {
-		// multipartFile이 있으면 RequestBody를 붙이면 안 됨
+		// multipartFile이 있으면 RequestBody를 붙이면 안 됨 (= JSON으로 안보낸다)
 
 	    logger.debug(requestCreateBoardVO.toString());
 		
@@ -165,7 +165,7 @@ private static final Logger logger = LoggerFactory.getLogger(BoardApi.class);
 	// 관리자인지 확인, 권한 확인하면 인증도 이미 확인된 거 or 내가 쓴 글인지
     // @ 붙이면 Bean에 있는 거 부를 수 있음 -> 앞글자만 소문자로 바뀌어서 들어감. 
 	// #id하면 id 받아서 넣을 수 있음
-	@GetMapping("/modify/{id}") // 관리자 or 작성한 사람 가능
+	@GetMapping("/modify/{id}") // 관리자 or 작성한 사람 가능. 얘는 테스트 안 함 
 	public String viewBoardModifyPage(
 			@PathVariable String id, Model model,
 			Authentication authentication

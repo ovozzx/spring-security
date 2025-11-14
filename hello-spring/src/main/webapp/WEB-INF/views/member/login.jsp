@@ -46,6 +46,9 @@
 		                          data-dependencies="#email,#password"
 		                          class="save-btn auto-active login-button">Login</button>
 		              </div>
+		              <div>
+		              	<a href="/oauth2/authorization/naver">Naver Login</a>
+		              </div>
 		           </div>
 		           
 		       </div>

@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.ktdsuniversity.edu.common.security.handlers.LoginFailureHandler;
 import com.ktdsuniversity.edu.common.security.handlers.LoginSuccessHandler;
 import com.ktdsuniversity.edu.common.security.jwt.filter.JwtAuthenticationFilter;
+import com.ktdsuniversity.edu.common.security.oauth.SecurityOAuthService;
 import com.ktdsuniversity.edu.member.dao.MemberDao;
 
 import ch.qos.logback.core.joran.spi.NoAutoStart;
@@ -28,12 +29,13 @@ public class SecurityConfig {
 	// 어떤 조건으로 동작할지 설정 (end point)
 	
 	@Autowired
+	private SecurityOAuthService securityOAuthService;
+	
+	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
     @Autowired
 	private MemberDao memberDao;
-    
-    
     
 	/**
 	 * Spring Security에 내장된 필터들이 어떤 조건에서 어떤 순서로 어떤 우선순위로 동작할 것인지 규칙을 정의
@@ -49,7 +51,8 @@ public class SecurityConfig {
 		
 		// http.csrf(csrf -> csrf.disable()); // 이거 안하면 405 에러 남
 		// http://localhost:8081/auth
-		http.csrf(csrf -> csrf.ignoringRequestMatchers("/auth")); // 추가한 url에는 확인하지마라 
+		http.csrf(csrf -> csrf.ignoringRequestMatchers("/auth", "/api/**")); // api에서 토큰을 전달할 필요 없게 (네트워크만 전달하면 됨)
+		// 추가한 url에는 확인하지마라 
 		
 		// CORSFilter 활성화. 파라미터 있는 생성자 사용. 시스템 간의 연동은 아래 설정이 필요!
  		http.cors(cors/*CorsConfigurer*/ -> {
@@ -67,7 +70,17 @@ public class SecurityConfig {
 			cors.configurationSource(corsSource);
 			
 		});
-		
+ 		
+ 		// OAuth Login 필터 조건 명시
+		http.oauth2Login(oAuthLogin -> {
+			oAuthLogin.userInfoEndpoint(config /*UserInfoEndPoingConfig*/ -> {
+				config.userService(this.securityOAuthService); // SecurityOAuthService Instance
+			});
+			oAuthLogin.defaultSuccessUrl("/list"); // 브라우저 이용 시 사용
+			oAuthLogin.loginPage("/member/login"); // OAuth2 인증 시작 페이지 명
+			//oAuthLogin.successHandler(null); // JWT 인증 기반 시 사용
+		});
+ 		
         // 인증과 관련된 필터에 대한 조건 명시.
 		// 설정상의 예외는 spring이 알 수 있도록 그냥 던짐 try catch 안함
 		http.formLogin((formLogin /*FormLoginConfigurer*/) -> {

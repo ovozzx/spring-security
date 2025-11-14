@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.member.vo;
 
+import com.ktdsuniversity.edu.common.security.oauth.provider.vo.OAuthProviderVO;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -19,6 +21,8 @@ public class RequestRegistMemberVO {
 	private String passwordConfirm;
 
 	private String salt;
+	
+	private OAuthProviderVO oAuthProviderVO;
 	
 	public String getEmail() {
 		return email;
@@ -59,11 +63,21 @@ public class RequestRegistMemberVO {
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
-	
+	public OAuthProviderVO getoAuthProviderVO() {
+		return oAuthProviderVO;
+	}
+
+	public void setoAuthProviderVO(OAuthProviderVO oAuthProviderVO) {
+		this.oAuthProviderVO = oAuthProviderVO;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestRegistMemberVO [email=" + email + ", name=" + name + ", password=" + password
-				+ ", passwordConfirm=" + passwordConfirm + "]";
+				+ ", passwordConfirm=" + passwordConfirm + ", salt=" + salt + ", oAuthProviderVO=" + oAuthProviderVO
+				+ "]";
 	}
+
+
 
 }

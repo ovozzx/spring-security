@@ -1,0 +1,65 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktdsuniversity.edu.common.security.oauth.provider.ProviderDao">
+
+	<select id="selectMemberCountByEmail"
+	parameterType="string"
+	resultType="_int">
+    SELECT COUNT(EMAIL)
+	  FROM MEMBER
+	 WHERE EMAIL = #{_parameter}
+	   AND DEL_YN = 'N'
+	</select>
+
+	<insert id="insertOAuthMember"
+	parameterType="com.ktdsuniversity.edu.member.vo.RequestRegistMemberVO">
+	     INSERT INTO "MEMBER" 
+         (EMAIL
+        , NAME
+        , PASSWORD
+        , SALT
+        , LOGIN_FAIL_CNT
+        , BLOCK_YN
+        , LATEST_LOGIN_BLOCK_DATE
+        , LATEST_LOGIN_FAIL_DATE
+        , LATEST_LOGIN_SUCCESS_DATE
+        , DEL_YN
+        , ROLE_ID) 
+        VALUES
+         (#{email}
+        , #{name}
+        , #{password}
+        , #{salt}
+        , 0
+        , 'N'
+        , NULL
+        , NULL
+        , NULL
+        , 'N'
+        , 'RL-20251112-000002') <!-- 사용자 ROLE_ID -->
+	</insert>
+	
+	<insert id="insertOAuthProvider"
+	parameterType="com.ktdsuniversity.edu.common.security.oauth.provider.vo.OAuthProviderVO">
+	     INSERT INTO OAUTH_PROVIDER
+		( EMAIL
+		, PROVIDER
+		, CRT_DT)
+		VALUES(
+		  #{email}
+		, #{provider}
+		, SYSDATE)
+	</insert>
+	
+	<select id="selectProviderCountByEmailAndProvider"
+	parameterType="com.ktdsuniversity.edu.common.security.oauth.provider.vo.OAuthProviderVO"
+	resultType="_int">
+	SELECT COUNT(EMAIL)
+	  FROM OAUTH_PROVIDER
+	 WHERE EMAIL = #{email}
+	   AND PROVIDER = #{provider}
+	</select>
+	
+	
+</mapper>

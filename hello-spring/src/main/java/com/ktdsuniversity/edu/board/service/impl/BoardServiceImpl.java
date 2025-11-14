@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.ktdsuniversity.edu.board.vo.RequestCreateBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestModifyBoardVO;
 import com.ktdsuniversity.edu.board.vo.RequestSearchBoardVO;
 import com.ktdsuniversity.edu.board.vo.ResponseBoardListVO;
+import com.ktdsuniversity.edu.common.exceptions.AjaxException;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.file.dao.FileDao;
 import com.ktdsuniversity.edu.file.dao.FileGroupDao;
@@ -113,14 +115,14 @@ public class BoardServiceImpl implements BoardService {
 //			Integer.parseInt("sfasdf"); // NumberFormatException
 			
 			if (updateCount == 0) {
-				throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
+				throw new AjaxException(id + " 게시글은 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 			}
 		}
 		
 		// 2. 게시글의 내용을 조회한다.
 		BoardVO board = this.boardDao.selectBoardById(id);
 		if (board == null) {
-			throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
+			throw new AjaxException(id + " 게시글은 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		// 3. 게시글의 내용을 반환시킨다.
@@ -142,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
 		int updateCount = this.boardDao.updateBoardModifyById(requestModifyBoardVO);
 		
 		if (updateCount == 0) {
-			throw new HelloSpringException(requestModifyBoardVO.getId() + " 게시글은 존재하지 않습니다.", "error/404");
+			throw new AjaxException(requestModifyBoardVO.getId()  + " 게시글은 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		return updateCount > 0;
@@ -160,7 +162,8 @@ public class BoardServiceImpl implements BoardService {
 		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		if (deleteCount == 0) {
-			throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
+			//throw new HelloSpringException(id + " 게시글은 존재하지 않습니다.", "error/404");
+			throw new AjaxException(id + " 게시글은 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		return deleteCount > 0;

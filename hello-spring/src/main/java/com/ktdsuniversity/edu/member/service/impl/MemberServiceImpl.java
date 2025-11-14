@@ -3,9 +3,11 @@ package com.ktdsuniversity.edu.member.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.common.exceptions.AjaxException;
 import com.ktdsuniversity.edu.common.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.common.util.SHAEncrypter;
 import com.ktdsuniversity.edu.member.dao.MemberDao;
@@ -29,7 +31,8 @@ public class MemberServiceImpl implements MemberService {
     	
 		int emailCount = this.memberDao.selectMemberCountByEmail( requestRegistMemberVO.getEmail() );
 		if (emailCount == 1) {
-			throw new HelloSpringException("이미 존재하는 이메일입니다.", "member/regist", "registData", requestRegistMemberVO);
+			//throw new HelloSpringException("이미 존재하는 이메일입니다.", "member/regist", "registData", requestRegistMemberVO);
+			throw new AjaxException("이미 존재하는 이메일입니다.", HttpStatus.CONFLICT);
 		}
 		
 		// 비밀번호 암호화.
